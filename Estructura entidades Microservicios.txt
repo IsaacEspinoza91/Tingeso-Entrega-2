@@ -1,0 +1,29 @@
+Estructura entidades Microservicios Tingeso
+
+MC1: Plan-service
+ - Plan(id, descripcion, duracion_total, precio_regular, precio_fin_semana, precio_feriado)
+
+MC2: Descuento-grupo-service
+ -  Descuento_grupo(id, min_personas, max_personas, porcentaje_descuento)
+
+MC3: Cliente-desc-frecu-service
+ - Descuento_cliente_frecuente(id, min_reservas, porcentaje_descuento)
+ - Cliente(id, rut, nombre, apellido, correo, telefono, fecha_nacimiento, activo)
+ - Cliente_reserva(id_reserva, id_cliente, fecha, estado)
+
+MC4: Dias-especiales-service
+ - Dias_feriados(id, fecha, descripcion)
+ - Cliente_cumpleanios(id_cliente, fecha)
+
+MC5: Reservas-comprobantes-service
+ -  Reserva(id, fecha, hora_inicio, hora_fin, estado, total_personas, id_plan, id_reservante, id_comprobante)
+ - Comprobante(id, total, pagado)
+ - Detalle_Comprobante(id, monto_total, valor_iva, monto_final, desc_especial, desc_grupo, desc_extra, tarifa, porcentaje_desc_grupo, porcentaje_desc_especial, tiene_desc_cliente_frecuente, tiene_descuento_cumpleanios, id_cliente (FK), id_comprobante (FK))
+ - Cliente_reserva(id_cliente FK, id_reserva PK FK)
+
+MC6: Rack-semanal-service
+ - Rack_reservas (id_reserva PK FK, id_cliente FK, fecha, hora_inicio, hora_fin)
+
+MC7: Reportes-service
+ - Reportes_ingresos_personas(id, rango_personas (string), mes (date primer dia del mes), ingresos)
+ - Reportes_ingresos_plan(id, id_plan FK, nombre_plan, mes, ingresos)

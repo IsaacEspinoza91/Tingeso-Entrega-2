@@ -31,7 +31,12 @@ spring:
         - id: descuento-grupo-service
           uri: lb://descuento-grupo-service
           predicates:
-            - Path=/api/descuento-grupo/**
+            - Path=/api/descuento-grupo-service/**
+
+        - id: cliente-desc-frecu-service
+          uri: lb://cliente-desc-frecu-service
+          predicates:
+            - Path=/api/cliente-service/**
         
         - id: dias-especiales-service
           uri: lb://dias-especiales-service

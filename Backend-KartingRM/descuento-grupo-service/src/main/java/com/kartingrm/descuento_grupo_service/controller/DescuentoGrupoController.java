@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/descuento-grupo/desc-grupo")
+@RequestMapping("/api/descuento-grupo/desc-grupo-sevice")
 @CrossOrigin("*")
 public class DescuentoGrupoController {
 
