@@ -20,7 +20,7 @@ public class Cliente {
     @Column(name = "apellido", length = 50)
     private String apellido;
 
-    @Column(name = "correo", length = 50)
+    @Column(name = "correo", length = 50, unique = true)
     private String correo;
 
     @Column(name = "telefono", length = 12)

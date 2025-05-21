@@ -19,7 +19,7 @@ public class DescuentoClienteFrecuenteService {
         return descuentoClienteFrecuenteRepository.findAll();
     }
 
-    public DescuentoClienteFrecuente getDescuentoClienteFrecuente(Long id) {
+    public DescuentoClienteFrecuente getDescuentoClienteFrecuenteById(Long id) {
         Optional<DescuentoClienteFrecuente> descuento = descuentoClienteFrecuenteRepository.findById(id);
         if (descuento.isEmpty()) throw new EntityNotFoundException("Descuento "+ id +" no encontrado");
 
@@ -44,6 +44,13 @@ public class DescuentoClienteFrecuenteService {
 
         descuentoClienteFrecuenteRepository.deleteById(id);
         return true;
+    }
+
+
+    // Obtener el porcentaje de descuento segun la cantidad de visitas, uso de query SQL
+    public double getPorcentajeDescuentoClienteFrecuenteByCantidadVisitas(int visitas) {
+        Optional<DescuentoClienteFrecuente> descuento = descuentoClienteFrecuenteRepository.findByVisitasBetweenMinimoMaximo(visitas);
+        return descuento.map(DescuentoClienteFrecuente::getPorcentajeDescuento).orElse(0.0);
     }
 
 }

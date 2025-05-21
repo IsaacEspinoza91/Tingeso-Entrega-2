@@ -13,11 +13,14 @@ public class DescuentoClienteFrecuente {
     @Column(name = "min_reservas", nullable = false)
     private int minReservas;
 
+    @Column(name = "max_reservas")
+    private int maxReservas;
+
     @Column(name = "porcentaje_descuento", nullable = false)
     private double porcentajeDescuento;
 
 
-    // COntructor
+    // Contructor
     public DescuentoClienteFrecuente() {}
 
     public DescuentoClienteFrecuente(Long id, int minReservas, double porcentajeDescuento) {
@@ -55,5 +58,13 @@ public class DescuentoClienteFrecuente {
 
     public void setPorcentajeDescuento(double porcentajeDescuento) {
         this.porcentajeDescuento = porcentajeDescuento;
+    }
+
+    public int getMaxReservas() {
+        return maxReservas;
+    }
+
+    public void setMaxReservas(int maxReservas) {
+        this.maxReservas = maxReservas;
     }
 }

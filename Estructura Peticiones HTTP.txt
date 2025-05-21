@@ -12,6 +12,15 @@ MC1: plan-service
 }
 
 - PUT, update plan: http://localhost:8080/api/plan/planes/2
+{
+    "descripcion": "10 vueltas o max 10 min",
+    "duracionTotal": 25,
+    "precioRegular": 20000,
+    "precioFeriado": 18000,
+    "precioFinSemana": 17000
+}
+
+
 - DELETE, eliminar plan: http://localhost:8080/api/plan/planes/2
 
 
@@ -19,24 +28,82 @@ MC1: plan-service
 MC2: descuento-grupo-service
 	--- Descuento_grupo Entity ---  CRUD
 - GET, obtener todos los descuentosGrupo: http://localhost:8080/api/descuento-grupo-sevice/desc-grupo/
-- GET, obtener descuentoGrupo by ID: http://localhost:8080/api/descuento-grupo/desc-grupo-sevice/1
-- POST, crear:   http://localhost:8080/api/descuento-grupo/desc-grupo-sevice/
+- GET, obtener descuentoGrupo by ID: http://localhost:8080/api/descuento-grupo-sevice/desc-grupo/1
+- POST, crear:   http://localhost:8080/api/descuento-grupo-sevice/desc-grupo/
 {
     "minPersonas": 3,
     "maxPersonas": 5,
     "porcentajeDescuento": 0.1
 }
 
-- PUT, update descuentoGrupo: http://localhost:8080/api/descuento-grupo/desc-grupo-sevice/1
-- DELETE, eliminar: http://localhost:8080/api/descuento-grupo/desc-grupo-sevice/1
+- PUT, update descuentoGrupo: http://localhost:8080/api/descuento-grupo-sevice/desc-grupo/1
+{
+    "minPersonas": 3,
+    "maxPersonas": 5,
+    "porcentajeDescuento": 0.4
+}
+
+- DELETE, eliminar: http://localhost:8080/api/descuento-grupo-sevice/desc-grupo/1
 
 
 - GET, obtener porcentaje de descuento segun cantidad de grupo:   http://localhost:8080/api/descuento-grupo-sevice/desc-grupo/cantidad/4
+resultado:
 {
     "porcentajeDescuento": 0.1
 }
 
 (se usan INDEXs en la base de datos para eficiencia en la búsqueda)
 
+
+
+MC3: cliente-desc-frecu-service
+	--- Cliente Entity ---    CRUD
+- GET, obtener todos los clientes: http://localhost:8080/api/cliente-service/cliente/
+- GET, obtener cliente según id: http://localhost:8080/api/cliente-service/cliente/2
+- POST, crear cliente (activo true default): http://localhost:8080/api/cliente-service/cliente/
+{
+    "rut": "21274232-2",
+    "nombre": "Isaac",
+    "apellido": "Espinoza",
+    "correo": "isaac@usach.cl",
+    "telefono": "+56998877665",
+    "fechaNacimiento": "1991-05-06"
+}
+
+- PUT, update cliente: http://localhost:8080/api/cliente-service/cliente/1
+{
+    "rut": "21174222-2",
+    "nombre": "Isaac1",
+    "apellido": "Espinoza1",
+    "correo": "isaac@usach.cl",
+    "telefono": "+56998877665",
+    "fechaNacimiento": "1995-05-06"
+}
+
+- DELETE, eliminar: http://localhost:8080/api/cliente-service/cliente/2
+- PUT, actualizar a inactivo: http://localhost:8080/api/cliente-service/cliente/inactivate/1
+- PUT, actualizar a activo: http://localhost:8080/api/cliente-service/cliente/activate/5
+
+
+	--- Descuento_cliente_frecuente --- CRUD
+- GET, obtener regla de descuento: http://localhost:8080/api/cliente-service/descuento-frecuente/
+- GET, obtener regla de descuento según id: http://localhost:8080/api/cliente-service/descuento-frecuente/1
+- POST, crear regla de descuento:  http://localhost:8080/api/cliente-service/descuento-frecuente/
+{
+    "minReservas": 7,
+    "maxReservas": 99, 
+    "porcentajeDescuento": 0.1
+}
+(OJO, considerar caso para mas de 7 visitas, entoces min es 7 el max es un valor alto como 99)
+
+- PUT, update regla de descuento: http://localhost:8080/api/cliente-service/descuento-frecuente/1
+{
+    "minReservas": 7,
+    "maxReservas": 99, 
+    "porcentajeDescuento": 0.3
+}
+
+- DELETE, eliminar regla de descuento: http://localhost:8080/api/cliente-service/descuento-frecuente/1
+- GET, : http://localhost:8080/api/cliente-service/descuento-frecuente/visitas/6
 
 

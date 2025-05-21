@@ -20,7 +20,7 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
-    public Cliente getCliente(Long id) {
+    public Cliente getClienteById(Long id) {
         Optional<Cliente> cliente = clienteRepository.findById(id);
         if (cliente.isEmpty()) throw new EntityNotFoundException("Cliente id " + id + " no encontrado");
 
@@ -45,6 +45,27 @@ public class ClienteService {
 
         clienteRepository.deleteById(id);
         return true;
+    }
+
+    public Cliente inactivateCliente(Long id) {
+        Optional<Cliente> clienteOptional = clienteRepository.findById(id);
+        if (clienteOptional.isEmpty()) {
+            throw new EntityNotFoundException("Cliente " + id + " no encontrado");
+        } else {
+            clienteOptional.get().setActivo(false);
+            return clienteRepository.save(clienteOptional.get());
+        }
+    }
+
+
+    public Cliente activateCliente(Long id) {
+        Optional<Cliente> clienteOptional = clienteRepository.findById(id);
+        if (clienteOptional.isEmpty()) {
+            throw new EntityNotFoundException("Cliente " + id + " no encontrado");
+        } else {
+            clienteOptional.get().setActivo(true);
+            return clienteRepository.save(clienteOptional.get());
+        }
     }
 
 }
