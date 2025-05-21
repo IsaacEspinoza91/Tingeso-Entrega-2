@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: cliente-desc-frecu-service
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8081
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cliente_db
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update

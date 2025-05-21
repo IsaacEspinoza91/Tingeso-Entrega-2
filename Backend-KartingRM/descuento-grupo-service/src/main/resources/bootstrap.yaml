@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: descuento-grupo-service
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8081
+  datasource:
+    url: jdbc:postgresql://localhost:5432/descuento_grupo_db
+    username: postgres
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: update
