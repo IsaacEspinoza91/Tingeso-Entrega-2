@@ -6,9 +6,9 @@ spring:
       enabled: true
       uri: http://localhost:8081
   datasource:
-    url: jdbc:postgresql://localhost:5432/plan_db
-    username: postgres
-    password: 123
+    url: jdbc:mysql://localhost:3306/plan_db
+    username: root
+    password: 1234
   jpa:
     hibernate:
       ddl-auto: update

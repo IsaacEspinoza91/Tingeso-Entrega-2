@@ -1,0 +1,19 @@
+MC1: plan-service
+
+	--- Plan Entity ---
+- GET, obtener todas los planes: http://localhost:8080/api/plan/planes/
+
+- GET, obtener plan por id: http://localhost:8080/api/plan/planes/2
+
+- POST, crear plan: http://localhost:8080/api/plan/planes/
+{
+    "descripcion": "10 vueltas o max 10 min",
+    "duracionTotal": 20,
+    "precioRegular": 20000,
+    "precioFeriado": 18000,
+    "precioFinSemana": 17000
+}
+
+- PUT, update plan: http://localhost:8080/api/plan/planes/2
+
+- DELETE, eliminar plan: http://localhost:8080/api/plan/planes/2
