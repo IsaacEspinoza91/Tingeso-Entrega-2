@@ -1,5 +1,6 @@
 package com.kartingrm.descuento_grupo_service.controller;
 
+import com.kartingrm.descuento_grupo_service.DTO.DescuentoGrupoResponse;
 import com.kartingrm.descuento_grupo_service.entity.DescuentoGrupo;
 import com.kartingrm.descuento_grupo_service.service.DescuentoGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +46,12 @@ public class DescuentoGrupoController {
     public ResponseEntity<Boolean> deleteDescuentoGrupo(@PathVariable Long id_desc) {
         descuentoGrupoService.deleteDescuentoGrupo(id_desc);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/cantidad/{cantidadPersonas}")
+    public ResponseEntity<DescuentoGrupoResponse> getPorcentajeDescuentoGrupoByCantidadIntegrantes(@PathVariable Integer cantidadPersonas){
+        double porcentaje = descuentoGrupoService.getPorcentajeDescuentoGrupoByCantidadIntegrantes(cantidadPersonas);
+        DescuentoGrupoResponse descuentoGrupoResponse = new DescuentoGrupoResponse(porcentaje);
+        return ResponseEntity.ok(descuentoGrupoResponse);
     }
 }

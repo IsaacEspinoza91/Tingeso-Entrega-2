@@ -3,7 +3,9 @@ package com.kartingrm.descuento_grupo_service.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "descuento_grupo")
+@Table(name = "descuento_grupo", indexes = {
+        @Index(name = "idx_min_max_personas", columnList = "min_personas, max_personas")
+})
 public class DescuentoGrupo {
 
     @Id

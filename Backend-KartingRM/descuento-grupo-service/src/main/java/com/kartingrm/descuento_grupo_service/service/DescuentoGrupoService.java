@@ -46,4 +46,11 @@ public class DescuentoGrupoService {
         descuentoGrupoRepository.deleteById(id);
         return true;
     }
+
+    // Obtener el porcentaje de descuento segun la cantidad de integrantes del grupo, uso de query SQL
+    public double getPorcentajeDescuentoGrupoByCantidadIntegrantes(int cantidad){
+        Optional<DescuentoGrupo> descuentoGrupoObtenido = descuentoGrupoRepository.findByCantidadBetweenMinimoMaximo(cantidad);
+        return descuentoGrupoObtenido.map(DescuentoGrupo::getPorcentajeDescuento).orElse(0.0);
+    }
+
 }

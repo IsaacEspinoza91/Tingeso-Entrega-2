@@ -1,10 +1,8 @@
 MC1: plan-service
 
-	--- Plan Entity ---
+	--- Plan Entity ---   CRUD
 - GET, obtener todas los planes: http://localhost:8080/api/plan/planes/
-
 - GET, obtener plan por id: http://localhost:8080/api/plan/planes/2
-
 - POST, crear plan: http://localhost:8080/api/plan/planes/
 {
     "descripcion": "10 vueltas o max 10 min",
@@ -15,5 +13,33 @@ MC1: plan-service
 }
 
 - PUT, update plan: http://localhost:8080/api/plan/planes/2
-
 - DELETE, eliminar plan: http://localhost:8080/api/plan/planes/2
+
+
+
+MC2: descuento-grupo-service
+
+	--- Descuento_grupo Entity ---  CRUD
+- GET, obtener todos los descuentosGrupo: http://localhost:8080/api/descuento-grupo/desc-grupo/
+- GET, obtener descuentoGrupo by ID: http://localhost:8080/api/descuento-grupo/desc-grupo/1
+- POST, crear:   http://localhost:8080/api/descuento-grupo/desc-grupo/
+{
+    "minPersonas": 3,
+    "maxPersonas": 5,
+    "porcentajeDescuento": 0.1
+}
+
+- PUT, update descuentoGrupo: http://localhost:8080/api/descuento-grupo/desc-grupo/1
+- DELETE, eliminar: http://localhost:8080/api/descuento-grupo/desc-grupo/1
+
+- GET, obtener porcentaje de descuento segun cantidad de grupo:   http://localhost:8080/api/descuento-grupo/desc-grupo/cantidad/4
+{
+    "porcentajeDescuento": 0.1
+}
+
+(se usan INDEXs en la base de datos para eficiencia en la búsqueda)
+
+
+
+
+HACER METODO PARA ENTREGAR EL POCENTAJE DE DESCUENTO
