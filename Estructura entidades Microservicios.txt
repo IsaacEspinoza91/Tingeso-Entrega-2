@@ -9,11 +9,11 @@ MC2: Descuento-grupo-service
 MC3: Cliente-desc-frecu-service
  - Descuento_cliente_frecuente(id, min_reservas, porcentaje_descuento)
  - Cliente(id, rut, nombre, apellido, correo, telefono, fecha_nacimiento, activo)
- - Cliente_reserva(id_reserva, id_cliente, fecha, estado)
+ - Cliente_reserva(id_reserva, id_cliente, fecha, estado)				-- Reserva crea estos registros NO IMPLEMENTADO
 
 MC4: Dias-especiales-service
- - Dias_feriados(id, fecha, descripcion)
- - Cliente_cumpleanios(id_cliente, fecha)
+ - Dia_feriado(id, fecha, descripcion)
+ - Cliente_cumpleanios(id_cliente, fecha)						-- Cliente crea estos registros NO IMPLEMENTADO, ojo los update de fecha
 
 MC5: Reservas-comprobantes-service
  -  Reserva(id, fecha, hora_inicio, hora_fin, estado, total_personas, id_plan, id_reservante, id_comprobante)

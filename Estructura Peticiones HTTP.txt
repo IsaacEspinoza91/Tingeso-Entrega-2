@@ -142,4 +142,40 @@ resultado:
 
 
 
+MC4: días-especiales-service
+	--- Dia_feriado ---   CRUD
+- GET, obtener todos los días feriados:  http://localhost:8080/api/dias-especiales-service/dias-feriados/
+- GET, obtener dia feriado según id: http://localhost:8080/api/dias-especiales-service/dias-feriados/1
+- POST, crear dia: http://localhost:8080/api/dias-especiales-service/dias-feriados/
+{
+    "nombre": "Dia del platano",
+    "fecha": "2025-05-22"
+}
 
+- PUT, update dia: http://localhost:8080/api/dias-especiales-service/dias-feriados/54
+{
+    "nombre": "Marcianeke",
+    "fecha": "2025-07-22"
+}
+
+- DELETE, eliminar dia:  http://localhost:8080/api/dias-especiales-service/dias-feriados/1
+- GET, obtiene bool sobre si el dia es feriado o no: http://localhost:8080/api/dias-especiales-service/dias-feriados/esFeriado?fecha=2025-01-01
+resultado: true o false
+
+	--- cliente_cumpleanios ---   CRUD
+- GET, obtener todos: http://localhost:8080/api/dias-especiales-service/cliente-cumpleanios/
+- GET,	obtener según id cliente: http://localhost:8080/api/dias-especiales-service/cliente-cumpleanios/{idCliente}
+- POST, crear registro:   http://localhost:8080/api/dias-especiales-service/cliente-cumpleanios/
+{
+    "idCliente": 1,
+    "fecha": "2003-04-09"
+}
+
+- PUT, update de fecha: http://localhost:8080/api/dias-especiales-service/cliente-cumpleanios/{idCliente}
+{
+    "fecha": "2005-04-09"
+}
+
+- DELETE, eliminar: http://localhost:8080/api/dias-especiales-service/cliente-cumpleanios/{idCliente}
+- GET, obtener bool si cliente según id esta de cumpleanios en un dia: http://localhost:8080/api/dias-especiales-service/cliente-cumpleanios/cliente/1/esCumpleaniero?fecha=2025-04-09
+resultado: true o false
