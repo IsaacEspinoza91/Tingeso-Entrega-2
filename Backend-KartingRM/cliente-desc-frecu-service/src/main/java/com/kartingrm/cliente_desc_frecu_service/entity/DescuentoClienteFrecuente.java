@@ -13,7 +13,7 @@ public class DescuentoClienteFrecuente {
     @Column(name = "min_reservas", nullable = false)
     private int minReservas;
 
-    @Column(name = "max_reservas")
+    @Column(name = "max_reservas", nullable = false)
     private int maxReservas;
 
     @Column(name = "porcentaje_descuento", nullable = false)
@@ -66,5 +66,15 @@ public class DescuentoClienteFrecuente {
 
     public void setMaxReservas(int maxReservas) {
         this.maxReservas = maxReservas;
+    }
+
+    @Override
+    public String toString() {
+        return "DescuentoClienteFrecuente{" +
+                "id=" + id +
+                ", minReservas=" + minReservas +
+                ", maxReservas=" + maxReservas +
+                ", porcentajeDescuento=" + porcentajeDescuento +
+                '}';
     }
 }

@@ -68,4 +68,11 @@ public class ClienteService {
         }
     }
 
+    public String getNombreCompletoClienteByid(Long id) {
+        Optional<Cliente> clienteOptional = clienteRepository.findById(id);
+        if (clienteOptional.isEmpty()) throw new EntityNotFoundException("Cliente id " + id + " no encontrado");
+
+        String nombreCompleto = clienteOptional.get().getNombre() + " " + clienteOptional.get().getApellido();
+        return nombreCompleto;
+    }
 }

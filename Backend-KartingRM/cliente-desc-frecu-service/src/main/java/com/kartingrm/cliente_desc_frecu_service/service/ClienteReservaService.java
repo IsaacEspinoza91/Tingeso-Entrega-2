@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,13 +16,15 @@ public class ClienteReservaService {
 
     @Autowired
     private ClienteReservaRepository clienteReservaRepository;
+    @Autowired
+    private DescuentoClienteFrecuenteService descuentoClienteFrecuenteService;
 
 
     public List<ClienteReserva> getClientesReservas() {
         return clienteReservaRepository.findAll();
     }
 
-    public ClienteReserva getClienteReserva(ClienteReservaId id) {
+    public ClienteReserva getClienteReservaById(ClienteReservaId id) {
         Optional<ClienteReserva> clienteReserva = clienteReservaRepository.findById(id);
         if (clienteReserva.isEmpty()) throw new EntityNotFoundException("ClienteReserva no encontrado");
 
@@ -60,6 +63,24 @@ public class ClienteReservaService {
 
         clienteReservaRepository.deleteById(id);
         return true;
+    }
+
+    // Obtiene la cantidad de veces que un cliente segun id ha participado en una reserva, sea comprador o integrante
+    // Probada.
+    private int getReservasCompletadasUltimoMes(Long idCliente) {
+        // Obtener fecha de hace 30 dias atras
+        LocalDate fechaInicio = LocalDate.now().minusDays(30);
+        return clienteReservaRepository.countReservasCompletadasDespuesDeFecha(idCliente, fechaInicio);
+    }
+
+    // Obtiene el descuento segun reglas de cliente frecuente segun la id del cliente
+    // Utiliza la funcion getReservasCompletadasUltimoMes para obtener la cantidad de visitas del cliente y usa
+    //   el metodo getPorcentajeDescuentoClienteFrecuenteByCantidadVisitas del servicio de descunetoClienteFrecuente
+    //   para obtener el valor porcentual
+    // Probada
+    public double getDescuentoClienteFrecuenteSegunIdCliente(Long idCliente) {
+        int cantidadVisitas = getReservasCompletadasUltimoMes(idCliente);
+        return descuentoClienteFrecuenteService.getPorcentajeDescuentoClienteFrecuenteByCantidadVisitas(cantidadVisitas);
     }
 
 

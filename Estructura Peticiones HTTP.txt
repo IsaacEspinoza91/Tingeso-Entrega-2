@@ -27,26 +27,26 @@ MC1: plan-service
 
 MC2: descuento-grupo-service
 	--- Descuento_grupo Entity ---  CRUD
-- GET, obtener todos los descuentosGrupo: http://localhost:8080/api/descuento-grupo-sevice/desc-grupo/
-- GET, obtener descuentoGrupo by ID: http://localhost:8080/api/descuento-grupo-sevice/desc-grupo/1
-- POST, crear:   http://localhost:8080/api/descuento-grupo-sevice/desc-grupo/
+- GET, obtener todos los descuentosGrupo: http://localhost:8080/api/descuento-grupo-service/desc-grupo/
+- GET, obtener descuentoGrupo by ID: http://localhost:8080/api/descuento-grupo-service/desc-grupo/1
+- POST, crear:   http://localhost:8080/api/descuento-grupo-service/desc-grupo/
 {
     "minPersonas": 3,
     "maxPersonas": 5,
     "porcentajeDescuento": 0.1
 }
 
-- PUT, update descuentoGrupo: http://localhost:8080/api/descuento-grupo-sevice/desc-grupo/1
+- PUT, update descuentoGrupo: http://localhost:8080/api/descuento-grupo-service/desc-grupo/1
 {
     "minPersonas": 3,
     "maxPersonas": 5,
     "porcentajeDescuento": 0.4
 }
 
-- DELETE, eliminar: http://localhost:8080/api/descuento-grupo-sevice/desc-grupo/1
+- DELETE, eliminar: http://localhost:8080/api/descuento-grupo-service/desc-grupo/1
 
 
-- GET, obtener porcentaje de descuento segun cantidad de grupo:   http://localhost:8080/api/descuento-grupo-sevice/desc-grupo/cantidad/4
+- GET, obtener porcentaje de descuento segun cantidad de grupo:   http://localhost:8080/api/descuento-grupo-service/desc-grupo/cantidad/4
 resultado:
 {
     "porcentajeDescuento": 0.1
@@ -84,6 +84,10 @@ MC3: cliente-desc-frecu-service
 - PUT, actualizar a inactivo: http://localhost:8080/api/cliente-service/cliente/inactivate/1
 - PUT, actualizar a activo: http://localhost:8080/api/cliente-service/cliente/activate/5
 
+- GET, nombre completo de cliente: http://localhost:8080/api/cliente-service/cliente/
+(retorna un string, no json)
+
+
 
 	--- Descuento_cliente_frecuente --- CRUD
 - GET, obtener regla de descuento: http://localhost:8080/api/cliente-service/descuento-frecuente/
@@ -104,6 +108,38 @@ MC3: cliente-desc-frecu-service
 }
 
 - DELETE, eliminar regla de descuento: http://localhost:8080/api/cliente-service/descuento-frecuente/1
-- GET, : http://localhost:8080/api/cliente-service/descuento-frecuente/visitas/6
+- GET, descuento según cantidad de visitas (regla negocio): http://localhost:8080/api/cliente-service/descuento-frecuente/visitas/6
+
+
+	--- Cliente_reserva ---   CRUD
+- GET, obtener todos: http://localhost:8080/api/cliente-service/cliente-reserva/
+- GET, obtener según id compuesta: http://localhost:8080/api/cliente-service/cliente-reserva/reserva/{idReserva}/cliente/{idCliente}
+- GET, obtner clienteReservas by id Cliente: http://localhost:8080/api/cliente-service/cliente-reserva/cliente/{idCliente}
+- POST, crear: http://localhost:8080/api/cliente-service/cliente-reserva/
+{
+    "id": {
+        "idReserva": 1,
+        "idCliente": 2
+    },
+    "fecha": "2024-04-03",
+    "estado": "completada"
+}
+
+- PUT, update: http://localhost:8080/api/cliente-service/cliente-reserva/reserva/1/cliente/2
+{
+    "fecha": "2024-04-03",
+    "estado": "pendiente"
+}
+(Se omite indicar id en el json)
+
+- DELETE, eliminar: http://localhost:8080/api/cliente-service/cliente-reserva/reserva/1/cliente/2
+- GET, descuento cliente frecuente segun la id del cliente:  http://localhost:8080/api/cliente-service/cliente-reserva/porcen-desc-by-visitas-cliente/{idCliente}
+resultado:
+{
+    "porcentajeDescuento": 0.3
+}
+
+
+
 
 

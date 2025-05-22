@@ -59,5 +59,9 @@ public class ClienteController {
         return ResponseEntity.ok(cliente);
     }
 
+    @GetMapping("/nombre-completo/{id}")
+    public ResponseEntity<String> getNombreCompletoById(@PathVariable Long id) {
+        return ResponseEntity.ok(clienteService.getNombreCompletoClienteByid(id));
+    }
 
 }
