@@ -52,4 +52,10 @@ public class DiaFeriadoService {
         return diaFeriadoRepository.esDiaFeriado(fecha);
     }
 
+
+    // Obtiene lista de dias feriados segun anio
+    public List<DiaFeriado> getDiasFeriadosByAnio(Integer anio) {
+        return diaFeriadoRepository.getDiasFeriadosByAnio(anio);
+    }
+
 }

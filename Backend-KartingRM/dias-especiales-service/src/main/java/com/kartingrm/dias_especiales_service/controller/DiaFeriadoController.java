@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/dias-especiales-service/dias-feriados")
@@ -57,5 +58,10 @@ public class DiaFeriadoController {
         return ResponseEntity.ok(esFeriado);
     }
 
-
+    // Obtiene dias feriados segun anio
+    @GetMapping("/anio/{numero_anio}")
+    public ResponseEntity<List<DiaFeriado>> getDiasFeriadosByAnio(@PathVariable Integer numero_anio) {
+        List<DiaFeriado> diasFeriadosEnAnio = diaFeriadoService.getDiasFeriadosByAnio(numero_anio);
+        return ResponseEntity.ok(diasFeriadosEnAnio);
+    }
 }

@@ -12,7 +12,7 @@
 	<artifactId>descuento-grupo-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>descuento-grupo-service</name>
-	<description>Gateway Service para KartingRm Microservicios</description>
+	<description>Descuento Grupo Service para KartingRm Microservicios</description>
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2020.0.3</spring-cloud.version>

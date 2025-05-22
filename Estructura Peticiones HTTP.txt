@@ -1,5 +1,5 @@
 MC1: plan-service
-	--- Plan Entity ---   CRUD
+	--- Plan ---   CRUD
 - GET, obtener todas los planes: http://localhost:8080/api/plan/planes/
 - GET, obtener plan por id: http://localhost:8080/api/plan/planes/2
 - POST, crear plan: http://localhost:8080/api/plan/planes/
@@ -26,7 +26,7 @@ MC1: plan-service
 
 
 MC2: descuento-grupo-service
-	--- Descuento_grupo Entity ---  CRUD
+	--- Descuento_grupo ---  CRUD
 - GET, obtener todos los descuentosGrupo: http://localhost:8080/api/descuento-grupo-service/desc-grupo/
 - GET, obtener descuentoGrupo by ID: http://localhost:8080/api/descuento-grupo-service/desc-grupo/1
 - POST, crear:   http://localhost:8080/api/descuento-grupo-service/desc-grupo/
@@ -57,7 +57,7 @@ resultado:
 
 
 MC3: cliente-desc-frecu-service
-	--- Cliente Entity ---    CRUD
+	--- Cliente ---    CRUD
 - GET, obtener todos los clientes: http://localhost:8080/api/cliente-service/cliente/
 - GET, obtener cliente según id: http://localhost:8080/api/cliente-service/cliente/2
 - POST, crear cliente (activo true default): http://localhost:8080/api/cliente-service/cliente/
@@ -161,6 +161,7 @@ MC4: días-especiales-service
 - DELETE, eliminar dia:  http://localhost:8080/api/dias-especiales-service/dias-feriados/1
 - GET, obtiene bool sobre si el dia es feriado o no: http://localhost:8080/api/dias-especiales-service/dias-feriados/esFeriado?fecha=2025-01-01
 resultado: true o false
+- GET, obtener los días feriados según anio: http://localhost:8080/api/dias-especiales-service/dias-feriados/anio/2026
 
 	--- cliente_cumpleanios ---   CRUD
 - GET, obtener todos: http://localhost:8080/api/dias-especiales-service/cliente-cumpleanios/
@@ -179,3 +180,45 @@ resultado: true o false
 - DELETE, eliminar: http://localhost:8080/api/dias-especiales-service/cliente-cumpleanios/{idCliente}
 - GET, obtener bool si cliente según id esta de cumpleanios en un dia: http://localhost:8080/api/dias-especiales-service/cliente-cumpleanios/cliente/1/esCumpleaniero?fecha=2025-04-09
 resultado: true o false
+
+
+
+
+
+MC5:  reserva-comprobante-service
+	--- Reserva ---   CRUD
+- GET, obtener todas las reservas: http://localhost:8080/api/reservas-comprobantes-service/reservas/
+- GET, obtener reserva según id: http://localhost:8080/api/reservas-comprobantes-service/reservas/1
+- GET, obtener todas las reservas de un cliente:  http://localhost:8080/api/reservas-comprobantes-service/reservas/reservante/{idCliente}
+- POST, crear entidad, se indica id reservante, id plan: http://localhost:8080/api/reservas-comprobantes-service/reservas/
+{
+    "fecha": "2025-05-22",
+    "horaInicio": "12:10",
+    "horafin": "12:40",
+    "estado": "confirmada",
+    "totalPersonas": 5,
+    "idPlan": 1,
+    "idReservante": 1
+}
+( NO SE INDICA idComprobante )
+
+- PUT, update de reserva, no permite cambiar id de comprobante: http://localhost:8080/api/reservas-comprobantes-service/reservas/{id}
+{
+    "fecha": "2025-05-21",
+    "horaInicio": "15:00",
+    "estado": "confirmada",
+    "totalPersonas": 5,
+    "idPlan": 1,
+    "idReservante": 1
+}
+
+- DELETE, eliminar reserva no elimina comprobante: http://localhost:8080/api/reservas-comprobantes-service/reservas/{id}
+
+
+	--- Cliente_Reserva --- CRUD
+- GET, Obtener registros segun id reserva: http://localhost:8080/api/reservas-comprobantes-service/cliente-reserva/reserva/2
+- POST, agregar cliente a reserva (considera limite reserva): http://localhost:8080/api/reservas-comprobantes-service/cliente-reserva/agregar/cliente/1/reserva/2
+- DELETE, quitar cliente de reserva: http://localhost:8080/api/reservas-comprobantes-service/cliente-reserva/quitar/cliente/1/reserva/2
+
+
+
