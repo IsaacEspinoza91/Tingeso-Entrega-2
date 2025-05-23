@@ -23,6 +23,18 @@ public class ClienteController {
         return ResponseEntity.ok(clientes);
     }
 
+    @GetMapping("/activos")
+    public ResponseEntity<List<Cliente>> getClientesActivos() {
+        List<Cliente> clientes = clienteService.getClientesActivos();
+        return ResponseEntity.ok(clientes);
+    }
+
+    @GetMapping("/inactivos")
+    public ResponseEntity<List<Cliente>> getClientesInactivas() {
+        List<Cliente> clientes = clienteService.getClientesInactivos();
+        return ResponseEntity.ok(clientes);
+    }
+
     @GetMapping("/{id_cliente}")
     public ResponseEntity<Cliente> getClienteById(@PathVariable Long id_cliente) {
         Cliente cliente = clienteService.getClienteById(id_cliente);

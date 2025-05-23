@@ -1,9 +1,7 @@
 package com.kartingrm.reservas_comprobantes_service.controller;
 
-import com.kartingrm.reservas_comprobantes_service.config.ServiceUnavailableException;
 import com.kartingrm.reservas_comprobantes_service.entity.ClienteReserva;
 import com.kartingrm.reservas_comprobantes_service.service.ClienteReservaService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

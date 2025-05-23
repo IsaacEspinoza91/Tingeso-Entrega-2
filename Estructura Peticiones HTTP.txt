@@ -77,7 +77,8 @@ MC3: cliente-desc-frecu-service
     "apellido": "Espinoza1",
     "correo": "isaac@usach.cl",
     "telefono": "+56998877665",
-    "fechaNacimiento": "1995-05-06"
+    "fechaNacimiento": "1995-05-06",
+    "activo": true
 }
 
 - DELETE, eliminar: http://localhost:8080/api/cliente-service/cliente/2
