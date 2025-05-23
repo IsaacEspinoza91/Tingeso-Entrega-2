@@ -1,13 +1,14 @@
 package com.kartingrm.cliente_desc_frecu_service.controller;
 
-import com.kartingrm.cliente_desc_frecu_service.DTO.DescuentoFrecuenciaResponse;
 import com.kartingrm.cliente_desc_frecu_service.entity.ClienteReserva;
 import com.kartingrm.cliente_desc_frecu_service.entity.ClienteReservaId;
 import com.kartingrm.cliente_desc_frecu_service.service.ClienteReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -57,10 +58,9 @@ public class ClienteReservaController {
     }
 
     @GetMapping("/porcen-desc-by-visitas-cliente/{idCliente}")
-    public ResponseEntity<DescuentoFrecuenciaResponse> getDescuentoClienteFrecuenteSegunIdCliente(@PathVariable Long idCliente) {
+    public ResponseEntity<Double> getDescuentoClienteFrecuenteSegunIdCliente(@PathVariable Long idCliente) {
         double porcentaje = clienteReservaService.getDescuentoClienteFrecuenteSegunIdCliente(idCliente);
-        DescuentoFrecuenciaResponse descuentoResponse = new DescuentoFrecuenciaResponse(porcentaje);
-        return ResponseEntity.ok(descuentoResponse);
+        return ResponseEntity.ok(porcentaje);
     }
 
 }

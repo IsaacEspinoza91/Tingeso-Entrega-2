@@ -1,6 +1,5 @@
 package com.kartingrm.cliente_desc_frecu_service.controller;
 
-import com.kartingrm.cliente_desc_frecu_service.DTO.DescuentoClienteFrecuenteResponse;
 import com.kartingrm.cliente_desc_frecu_service.entity.DescuentoClienteFrecuente;
 import com.kartingrm.cliente_desc_frecu_service.service.DescuentoClienteFrecuenteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +46,9 @@ public class DescuentoClienteFrecuenteController {
     }
 
     @GetMapping("/visitas/{cantidadvisitas}")
-    public ResponseEntity<DescuentoClienteFrecuenteResponse> getPorcentajeDescuentoGrupoByCantidadIntegrantes(@PathVariable Integer cantidadvisitas) {
+    public ResponseEntity<Double> getPorcentajeDescuentoGrupoByCantidadIntegrantes(@PathVariable Integer cantidadvisitas) {
         double porcentaje = descuentoClienteFrecuenteService.getPorcentajeDescuentoClienteFrecuenteByCantidadVisitas(cantidadvisitas);
-        DescuentoClienteFrecuenteResponse descuentoRespuesta = new DescuentoClienteFrecuenteResponse(porcentaje);
-        return ResponseEntity.ok().body(descuentoRespuesta);
+        return ResponseEntity.ok().body(porcentaje);
     }
 
 }

@@ -33,14 +33,12 @@ public class Reserva {
     @Column(name = "id_reservante", nullable = false)
     private Long idReservante;
 
-    @Column(name = "id_comprobante")
-    private Long idComprobante;
 
 
     // Constructor
     public Reserva() {}
 
-    public Reserva(Long id, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, String estado, int totalPersonas, Long idPlan, Long idReservante, Long idComprobante) {
+    public Reserva(Long id, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, String estado, int totalPersonas, Long idPlan, Long idReservante) {
         this.id = id;
         this.fecha = fecha;
         this.horaInicio = horaInicio;
@@ -49,10 +47,9 @@ public class Reserva {
         this.totalPersonas = totalPersonas;
         this.idPlan = idPlan;
         this.idReservante = idReservante;
-        this.idComprobante = idComprobante;
     }
 
-    public Reserva(LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, String estado, int totalPersonas, Long idPlan, Long idReservante, Long idComprobante) {
+    public Reserva(LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, String estado, int totalPersonas, Long idPlan, Long idReservante) {
         this.fecha = fecha;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
@@ -60,7 +57,6 @@ public class Reserva {
         this.totalPersonas = totalPersonas;
         this.idPlan = idPlan;
         this.idReservante = idReservante;
-        this.idComprobante = idComprobante;
     }
 
 
@@ -129,14 +125,6 @@ public class Reserva {
         this.idReservante = idReservante;
     }
 
-    public Long getIdComprobante() {
-        return idComprobante;
-    }
-
-    public void setIdComprobante(Long idComprobante) {
-        this.idComprobante = idComprobante;
-    }
-
     @Override
     public String toString() {
         return "Reserva{" +
@@ -148,7 +136,6 @@ public class Reserva {
                 ", totalPersonas=" + totalPersonas +
                 ", idPlan=" + idPlan +
                 ", idReservante=" + idReservante +
-                ", idComprobante=" + idComprobante +
                 '}';
     }
 }

@@ -94,18 +94,13 @@ public class ReservaService {
     }
 
 
-    // Update de valor de reserva. No permite cambio de idComprobante. Permite cambio de plan y de cliente reservante
+    // Update de valor de reserva. Permite cambio de plan y de cliente reservante
     public Reserva updateReserva(Long id, Reserva reserva) {
         Optional<Reserva> reservaOriginalOptional = reservaRepository.findById(id);
         if (reservaOriginalOptional.isEmpty()) throw new EntityNotFoundException("Reserva id " + id + " no encontrado");
 
         // Reserva actualizada conserva id de la reserva original
         reserva.setId(id);
-
-        // Condicion anti cambio de id comprobante
-        if (reservaOriginalOptional.get().getIdComprobante() != reserva.getIdComprobante()) {
-            throw new IllegalStateException("No se permite el cambio de id de comprobante");
-        }
 
         // Calculo de hora final segun nueva hora o plan
         // Obtener Plan

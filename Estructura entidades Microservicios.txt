@@ -16,9 +16,9 @@ MC4: Dias-especiales-service
  - Cliente_cumpleanios(id_cliente, fecha)						-- Cliente MC3 modifica estos registros CRUD (IMPLEMENTADO)
 
 MC5: Reservas-comprobantes-service
- - Reserva(id, fecha, hora_inicio, hora_fin, estado, total_personas, id_plan, id_reservante, id_comprobante)
+ - Reserva(id, fecha, hora_inicio, hora_fin, estado, total_personas, id_plan, id_reservante)
  - Cliente_reserva(id_cliente PK FK, id_reserva PK FK)					-- Desde Cliente_Reserva (MC3) no se puede actualizar esta tabla. Esta es la principal 
- - Comprobante(id, total, pagado)
+ - Comprobante(id, total, pagado, id_reserva)
  - Detalle_Comprobante(id, monto_total, valor_iva, monto_final, desc_especial, desc_grupo, desc_extra, tarifa, porcentaje_desc_grupo, porcentaje_desc_especial, tiene_desc_cliente_frecuente, tiene_descuento_cumpleanios, id_cliente (FK), id_comprobante (FK))
 
 MC6: Rack-semanal-service
