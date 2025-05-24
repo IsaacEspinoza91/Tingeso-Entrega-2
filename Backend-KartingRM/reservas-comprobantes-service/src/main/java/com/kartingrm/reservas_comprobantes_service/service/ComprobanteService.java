@@ -4,9 +4,7 @@ import com.kartingrm.reservas_comprobantes_service.entity.ClienteReserva;
 import com.kartingrm.reservas_comprobantes_service.entity.Comprobante;
 import com.kartingrm.reservas_comprobantes_service.entity.DetalleComprobante;
 import com.kartingrm.reservas_comprobantes_service.entity.Reserva;
-import com.kartingrm.reservas_comprobantes_service.model.ClienteDTO;
-import com.kartingrm.reservas_comprobantes_service.model.ComprobanteConDetallesDTO;
-import com.kartingrm.reservas_comprobantes_service.model.PlanDTO;
+import com.kartingrm.reservas_comprobantes_service.model.*;
 import com.kartingrm.reservas_comprobantes_service.repository.ComprobanteRepository;
 import com.kartingrm.reservas_comprobantes_service.repository.DetalleComprobanteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +32,56 @@ public class ComprobanteService {
     private ReservaService reservaService;
     @Autowired
     private ClienteReservaService clienteReservaService;
+
+
+
+    // GET
+    // Obtener comprobante con detalles segun id comprobante
+    public ComprobanteConDetallesDTO getComprobanteConDetallesById(Long idComprobante) {
+        // Obtener comprobante
+        Comprobante comprobante = comprobanteRepository.findById(idComprobante)
+                .orElseThrow(() -> new EntityNotFoundException("Comprobante no encontrado"));
+
+        // Obtener los detalles del comprobante
+        List<DetalleComprobante> detallesOriginales = detalleComprobanteRepository.findDetalleComprobantesByIdComprobante(idComprobante);
+        List<DetalleComprobanteConClienteDTO> detalles = new ArrayList<>();
+        for (DetalleComprobante detalleActual : detallesOriginales) {
+            ClienteDTO integranteObjeto = restTemplate.getForObject(
+                    "http://cliente-desc-frecu-service/api/cliente-service/cliente/" + detalleActual.getIdCliente(),
+                    ClienteDTO.class);
+            detalles.add(new DetalleComprobanteConClienteDTO(detalleActual,integranteObjeto));
+        }
+
+        // Obtener reserva segun la id
+        Reserva reserva = reservaService.getReservaById(comprobante.getIdReserva());
+
+        // Crear objeto Reserva DTO
+        ReservaDTO reservaDTO = new ReservaDTO();
+        reservaDTO.setId(reserva.getId());
+        reservaDTO.setFecha(reserva.getFecha());
+        reservaDTO.setHoraInicio(reserva.getHoraInicio());
+        reservaDTO.setHoraFin(reserva.getHoraFin());
+        reservaDTO.setEstado(reserva.getEstado());
+        reservaDTO.setTotalPersonas(reserva.getTotalPersonas());
+        // Obtener objetos cliente y plan mediante peticion http
+        ClienteDTO cliente = restTemplate.getForObject("http://cliente-desc-frecu-service/api/cliente-service/cliente/" + reserva.getIdReservante(), ClienteDTO.class);
+        PlanDTO plan = restTemplate.getForObject("http://plan-service/api/plan/planes/" + reserva.getIdPlan(), PlanDTO.class);
+        reservaDTO.setPlan(plan);
+        reservaDTO.setReservante(cliente);
+
+
+
+        // Crear objeto combinado de comprobante y detalles
+        ComprobanteConDetallesDTO comprobanteConDetalles = new ComprobanteConDetallesDTO();
+        comprobanteConDetalles.setId(comprobante.getId());
+        comprobanteConDetalles.setTotal(comprobante.getTotal());
+        comprobanteConDetalles.setPagado(comprobante.isPagado());
+        comprobanteConDetalles.setReserva(reservaDTO);
+        comprobanteConDetalles.setDetalles(detalles);
+
+        return comprobanteConDetalles;
+    }
+
 
 
     // Create
@@ -74,9 +122,8 @@ public class ComprobanteService {
         comprobante.setIdReserva(reservaId);
         comprobante.setPagado(true);
         comprobanteRepository.save(comprobante);
-        System.out.println(comprobante);
 
-        List<DetalleComprobante> detalles = new ArrayList<>();
+        List<DetalleComprobanteConClienteDTO> detalles = new ArrayList<>();
         // Crear detalles para cada persona en la reserva. Iteramos sobre la lista de integrantes
         for (ClienteReserva clienteActual : integrantes) {
 
@@ -90,7 +137,11 @@ public class ComprobanteService {
                     cantidadCumpleanieros);
 
             detalleComprobanteRepository.save(detalle);
-            detalles.add(detalle);
+            // Crear objeto DetalleComprobanteConClienteDTO para estructura de json
+            ClienteDTO integranteObjeto = restTemplate.getForObject(
+                    "http://cliente-desc-frecu-service/api/cliente-service/cliente/" + clienteActual.getIdCliente(),
+                    ClienteDTO.class);
+            detalles.add(new DetalleComprobanteConClienteDTO(detalle, integranteObjeto));
 
             // Si es cumpleaniero, se suma a la cantidad en la variable
             if (esCumpleaniero(clienteActual.getIdCliente(), reserva.getFecha())) cantidadCumpleanieros += 1;
@@ -99,12 +150,27 @@ public class ComprobanteService {
 
 
         actualizarTotalComprobante(comprobante);
-        System.out.println(comprobante);
+
+        // Crear objeto Reserva DTO
+        ReservaDTO reservaDTO = new ReservaDTO();
+        reservaDTO.setId(reserva.getId());
+        reservaDTO.setFecha(reserva.getFecha());
+        reservaDTO.setHoraInicio(reserva.getHoraInicio());
+        reservaDTO.setHoraFin(reserva.getHoraFin());
+        reservaDTO.setEstado(reserva.getEstado());
+        reservaDTO.setTotalPersonas(reserva.getTotalPersonas());
+        // Obtener objetos cliente y plan mediante peticion http
+        ClienteDTO cliente = restTemplate.getForObject("http://cliente-desc-frecu-service/api/cliente-service/cliente/" + reserva.getIdReservante(), ClienteDTO.class);
+        PlanDTO plan = restTemplate.getForObject("http://plan-service/api/plan/planes/" + reserva.getIdPlan(), PlanDTO.class);
+        reservaDTO.setPlan(plan);
+        reservaDTO.setReservante(cliente);
+
+
         ComprobanteConDetallesDTO comprobanteConDetallesDTO = new ComprobanteConDetallesDTO();
         comprobanteConDetallesDTO.setId(comprobante.getId());
         comprobanteConDetallesDTO.setTotal(comprobante.getTotal());
         comprobanteConDetallesDTO.setPagado(comprobante.isPagado());
-        comprobanteConDetallesDTO.setIdReserva(comprobante.getIdReserva());
+        comprobanteConDetallesDTO.setReserva(reservaDTO);
         comprobanteConDetallesDTO.setDetalles(detalles);
 
         return comprobanteConDetallesDTO;
@@ -183,26 +249,30 @@ public class ComprobanteService {
     }
 
 
-    // GET
-    public ComprobanteConDetallesDTO getComprobanteConDetallesById(Long idComprobante) {
+
+    // UPDATE
+    // Permite cambiar el estado (BOOL) de un comprobante
+    public Comprobante updateEstadoPagadoDeComprobante(Long idComprobante, Boolean pagado) {
         // Obtener comprobante
         Comprobante comprobante = comprobanteRepository.findById(idComprobante)
                 .orElseThrow(() -> new EntityNotFoundException("Comprobante no encontrado"));
 
-        // Obtener los detalles del comprobante
-        List<DetalleComprobante> detalles = detalleComprobanteRepository.findDetalleComprobantesByIdComprobante(idComprobante);
-
-        // Crear objeto combinado de comprobante y detalles
-        ComprobanteConDetallesDTO comprobanteConDetalles = new ComprobanteConDetallesDTO();
-        comprobanteConDetalles.setId(comprobante.getId());
-        comprobanteConDetalles.setTotal(comprobante.getTotal());
-        comprobanteConDetalles.setPagado(comprobante.isPagado());
-        comprobanteConDetalles.setIdReserva(comprobante.getIdReserva());
-        comprobanteConDetalles.setDetalles(detalles);
-
-        return comprobanteConDetalles;
+        comprobante.setPagado(pagado);
+        return comprobanteRepository.save(comprobante);
     }
 
+    // DELETE
+    public boolean deleteComprobante(Long idComprobante) {
+        // Eliminar detalles de comprobante
+        List<DetalleComprobante> detallesOriginales = detalleComprobanteRepository.findDetalleComprobantesByIdComprobante(idComprobante);
+        for (DetalleComprobante detalleActual : detallesOriginales) {
+            detalleComprobanteRepository.delete(detalleActual);
+        }
+
+        // Eliminar comprobante
+        comprobanteRepository.deleteById(idComprobante);
+        return true;
+    }
 
 
 

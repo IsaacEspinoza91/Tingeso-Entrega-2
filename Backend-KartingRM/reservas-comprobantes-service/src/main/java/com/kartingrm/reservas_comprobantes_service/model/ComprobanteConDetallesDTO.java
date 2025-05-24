@@ -9,16 +9,17 @@ public class ComprobanteConDetallesDTO {
     private Long id;
     private Double total;
     private Boolean pagado;
-    private Long idReserva;
-    private List<DetalleComprobante> detalles;
+    private ReservaDTO reserva;
+    private List<DetalleComprobanteConClienteDTO> detalles;
 
     // Constructores
     public ComprobanteConDetallesDTO() {}
-    public ComprobanteConDetallesDTO(Long id, Double total, Boolean pagado, Long idReserva, List<DetalleComprobante> detalles) {
+
+    public ComprobanteConDetallesDTO(Long id, Double total, Boolean pagado, ReservaDTO reserva, List<DetalleComprobanteConClienteDTO> detalles) {
         this.id = id;
         this.total = total;
         this.pagado = pagado;
-        this.idReserva = idReserva;
+        this.reserva = reserva;
         this.detalles = detalles;
     }
 
@@ -47,19 +48,19 @@ public class ComprobanteConDetallesDTO {
         this.pagado = pagado;
     }
 
-    public Long getIdReserva() {
-        return idReserva;
+    public ReservaDTO getReserva() {
+        return reserva;
     }
 
-    public void setIdReserva(Long idReserva) {
-        this.idReserva = idReserva;
+    public void setReserva(ReservaDTO reserva) {
+        this.reserva = reserva;
     }
 
-    public List<DetalleComprobante> getDetalles() {
+    public List<DetalleComprobanteConClienteDTO> getDetalles() {
         return detalles;
     }
 
-    public void setDetalles(List<DetalleComprobante> detalles) {
+    public void setDetalles(List<DetalleComprobanteConClienteDTO> detalles) {
         this.detalles = detalles;
     }
 }

@@ -22,7 +22,7 @@ MC5: Reservas-comprobantes-service
  - Detalle_Comprobante(id, monto_total, valor_iva, monto_final, desc_especial, desc_grupo, desc_extra, tarifa, porcentaje_desc_grupo, porcentaje_desc_especial, tiene_desc_cliente_frecuente, tiene_descuento_cumpleanios, id_cliente (FK), id_comprobante (FK))
 
 MC6: Rack-semanal-service
- - Rack_reservas (id_reserva PK FK, id_cliente FK, fecha, hora_inicio, hora_fin)
+ - Rack_reservas (id_reserva PK FK, id_cliente FK, nombre_cliente, fecha, hora_inicio, hora_fin)
 
 MC7: Reportes-service
  - Reportes_ingresos_personas(id, rango_personas (string), mes (date primer dia del mes), ingresos)

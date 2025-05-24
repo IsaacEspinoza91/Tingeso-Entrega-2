@@ -1,8 +1,5 @@
 package com.kartingrm.reservas_comprobantes_service.model;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import java.time.LocalDate;
 
 public class ClienteDTO {

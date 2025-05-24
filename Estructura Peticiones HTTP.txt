@@ -186,6 +186,23 @@ MC5:  reserva-comprobante-service
 - GET, obtener todas las reservas: http://localhost:8080/api/reservas-comprobantes-service/reservas/
 - GET, obtener reserva según id: http://localhost:8080/api/reservas-comprobantes-service/reservas/1
 - GET, obtener todas las reservas de un cliente:  http://localhost:8080/api/reservas-comprobantes-service/reservas/reservante/{idCliente}
+Resultado:	(Los 3 métodos anteriores obtienen la estructura básica de la reserva)
+{
+    "id": 4,
+    "fecha": "2025-05-24",
+    "horaInicio": "12:10:00",
+    "horaFin": "12:50:00",
+    "estado": "confirmada",
+    "totalPersonas": 5,
+    "idPlan": 1,
+    "idReservante": 1
+}
+
+- GET, todas las reservas DTO: http://localhost:8080/api/reservas-comprobantes-service/reservas/DTO/
+- GET, reserva DTO según id: http://localhost:8080/api/reservas-comprobantes-service/reservas/DTO/3
+- GET, reservas DTO de un cliente según id: http://localhost:8080/api/reservas-comprobantes-service/reservas/DTO/reservante/4
+
+
 - POST, crear entidad, se indica id reservante, id plan: http://localhost:8080/api/reservas-comprobantes-service/reservas/
 {
     "fecha": "2025-05-22",
@@ -219,21 +236,48 @@ MC5:  reserva-comprobante-service
 
 
 
-	--- Comprobante y Detalles_Comprobantes --- CRUD
-Los registros Detalle_Comprobantes son entidad débil. Por lo que se maneja desde Comprobante
-
+	--- Comprobante y Detalles_Comprobantes --- CRUD (Los registros Detalle_Comprobantes son entidad débil. Por lo que se maneja desde Comprobante)
 - GET, obtener comprobante según id: http://localhost:8080/api/reservas-comprobantes-service/comprobantes/6
+resultado: mismo DTO de post
+
+- PUT, actualizar estado pagado (bool) de comprobante: http://localhost:8080/api/reservas-comprobantes-service/comprobantes/{id_comprobante}/estado/false
+ 
 - POST, crear comprobante con detalles: http://localhost:8080/api/reservas-comprobantes-service/comprobantes/reserva/{id_comprobante}/descuento-extra/{desc_extra}
 Sin body
-resultado DTO:			AGREGAR NOMBRE DE USUARIO?
+resultado DTO:
 {
-    "id": 6,
+    "id": 9,
     "total": 24633.0,
     "pagado": true,
-    "idReserva": 4,
+    "reserva": {
+        "id": 4,
+        "fecha": "2025-05-25",
+        "horaInicio": "12:10:00",
+        "horaFin": "12:50:00",
+        "estado": "confirmada",
+        "totalPersonas": 5,
+        "plan": {
+            "id": 1,
+            "descripcion": "20 vueltas o max 20 min",
+            "duracionTotal": 40,
+            "precioRegular": 25000.0,
+            "precioFinSemana": 23000.0,
+            "precioFeriado": 22000.0
+        },
+        "reservante": {
+            "id": 1,
+            "rut": "21274232-2",
+            "nombre": "Isaac",
+            "apellido": "Espinoza",
+            "correo": "isaac@usach.cl",
+            "telefono": "+56998877665",
+            "fechaNacimiento": "1991-05-06",
+            "activo": true
+        }
+    },
     "detalles": [
         {
-            "id": 1,
+            "id": 16,
             "tarifa": 4600.0,
             "descuentoGrupo": 460.0,
             "porcentajeDescuentoGrupo": 10.0,
@@ -245,11 +289,19 @@ resultado DTO:			AGREGAR NOMBRE DE USUARIO?
             "montoTotal": 4926.6,
             "tieneDescuentoCumpleanios": false,
             "tieneDescuentoClienteFrecuente": false,
-            "idCliente": 11,
-            "idComprobante": 6
+            "cliente": {
+                "id": 11,
+                "rut": "1",
+                "nombre": "nombre1",
+                "apellido": "apellido1",
+                "correo": "nombre1@usach.cl",
+                "telefono": "+56928177665",
+                "fechaNacimiento": "2008-05-24",
+                "activo": true
+            }
         },
         {
-            "id": 2,
+            "id": 17,
             "tarifa": 4600.0,
             "descuentoGrupo": 460.0,
             "porcentajeDescuentoGrupo": 10.0,
@@ -261,11 +313,19 @@ resultado DTO:			AGREGAR NOMBRE DE USUARIO?
             "montoTotal": 4926.6,
             "tieneDescuentoCumpleanios": false,
             "tieneDescuentoClienteFrecuente": false,
-            "idCliente": 12,
-            "idComprobante": 6
+            "cliente": {
+                "id": 12,
+                "rut": "2",
+                "nombre": "nombre2",
+                "apellido": "apellido2",
+                "correo": "nombre2@usach.cl",
+                "telefono": "+56928177665",
+                "fechaNacimiento": "2003-05-24",
+                "activo": true
+            }
         },
         {
-            "id": 3,
+            "id": 18,
             "tarifa": 4600.0,
             "descuentoGrupo": 460.0,
             "porcentajeDescuentoGrupo": 10.0,
@@ -277,11 +337,19 @@ resultado DTO:			AGREGAR NOMBRE DE USUARIO?
             "montoTotal": 4926.6,
             "tieneDescuentoCumpleanios": false,
             "tieneDescuentoClienteFrecuente": false,
-            "idCliente": 13,
-            "idComprobante": 6
+            "cliente": {
+                "id": 13,
+                "rut": "3",
+                "nombre": "nombre3",
+                "apellido": "apellido3",
+                "correo": "nombre3@usach.cl",
+                "telefono": "+56928177665",
+                "fechaNacimiento": "2003-05-01",
+                "activo": true
+            }
         },
         {
-            "id": 4,
+            "id": 19,
             "tarifa": 4600.0,
             "descuentoGrupo": 460.0,
             "porcentajeDescuentoGrupo": 10.0,
@@ -293,11 +361,19 @@ resultado DTO:			AGREGAR NOMBRE DE USUARIO?
             "montoTotal": 4926.6,
             "tieneDescuentoCumpleanios": false,
             "tieneDescuentoClienteFrecuente": false,
-            "idCliente": 14,
-            "idComprobante": 6
+            "cliente": {
+                "id": 14,
+                "rut": "4",
+                "nombre": "nombre4",
+                "apellido": "apellido4",
+                "correo": "nombre4@usach.cl",
+                "telefono": "+56928177665",
+                "fechaNacimiento": "2004-05-01",
+                "activo": true
+            }
         },
         {
-            "id": 5,
+            "id": 20,
             "tarifa": 4600.0,
             "descuentoGrupo": 460.0,
             "porcentajeDescuentoGrupo": 10.0,
@@ -309,8 +385,16 @@ resultado DTO:			AGREGAR NOMBRE DE USUARIO?
             "montoTotal": 4926.6,
             "tieneDescuentoCumpleanios": false,
             "tieneDescuentoClienteFrecuente": false,
-            "idCliente": 15,
-            "idComprobante": 6
+            "cliente": {
+                "id": 15,
+                "rut": "5",
+                "nombre": "nombre5",
+                "apellido": "apellido5",
+                "correo": "nombre5@usach.cl",
+                "telefono": "+56928177665",
+                "fechaNacimiento": "2005-05-01",
+                "activo": true
+            }
         }
     ]
 }
@@ -319,3 +403,104 @@ resultado DTO:			AGREGAR NOMBRE DE USUARIO?
 
 
 
+
+MC6: rack-semanal-service
+	--- Rack semana --- CRUD
+- GET, obtener todos los registros:  http://localhost:8080/api/rack-semanal-service/rack-reserva/
+- GET, obtener registro según id reserva:  http://localhost:8080/api/rack-semanal-service/rack-reserva/1
+- POST, generar registro:  http://localhost:8080/api/rack-semanal-service/rack-reserva/
+{
+    "idReserva": 3,
+    "idCliente": 2,
+    "nombreReservante": "Isaac",
+    "fecha": "2025-05-25",
+    "horaInicio": "12:20:00",
+    "horaFin": "13:00:00"
+}
+
+- PUT, update:   http://localhost:8080/api/rack-semanal-service/rack-reserva/3
+{
+    "idCliente": 2,
+    "nombreReservante": "Isaac",
+    "fecha": "2025-05-22",
+    "horaInicio": "12:20:00",
+    "horaFin": "13:00:00"
+}
+
+- DELETE, eliminar: http://localhost:8080/api/rack-semanal-service/rack-reserva/1
+
+
+GET, obtener rack semanal:  http://localhost:8080/api/rack-semanal-service/get-rack/0
+resultado:
+{
+    "fechaInicioSemana": "2025-04-28",
+    "fechaFinSemana": "2025-05-04",
+    "reservasPorDia": {
+        "lunes": [],
+        "martes": [
+            {
+                "codigoReserva": "16",
+                "nombreReservante": "Lionel Messi",
+                "horaInicio": "16:00:00",
+                "horaFin": "16:40:00"
+            },
+            {
+                "codigoReserva": "17",
+                "nombreReservante": "Isaac Espinoza",
+                "horaInicio": "18:10:00",
+                "horaFin": "18:40:00"
+            }
+        ],
+        "miércoles": [],
+        "jueves": [
+            {
+                "codigoReserva": "20",
+                "nombreReservante": "Nicolas Fernandez",
+                "horaInicio": "10:00:00",
+                "horaFin": "10:40:00"
+            },
+            {
+                "codigoReserva": "21",
+                "nombreReservante": "Lionel Messi",
+                "horaInicio": "16:00:00",
+                "horaFin": "16:30:00"
+            },
+            {
+                "codigoReserva": "22",
+                "nombreReservante": "Lionel Messi",
+                "horaInicio": "17:00:00",
+                "horaFin": "17:35:00"
+            }
+        ],
+        "viernes": [
+            {
+                "codigoReserva": "23",
+                "nombreReservante": "Lionel Messi",
+                "horaInicio": "14:00:00",
+                "horaFin": "14:40:00"
+            }
+        ],
+        "sábado": [
+            {
+                "codigoReserva": "8",
+                "nombreReservante": "Isaac Espinoza",
+                "horaInicio": "17:40:00",
+                "horaFin": "18:15:00"
+            }
+        ],
+        "domingo": [
+            {
+                "codigoReserva": "24",
+                "nombreReservante": "Lionel Messi",
+                "horaInicio": "17:30:00",
+                "horaFin": "18:10:00"
+            }
+        ]
+    }
+}
+
+
+
+
+MC7: reportes-service
+mañana lo hago, ya son las 4 am
