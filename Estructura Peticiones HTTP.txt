@@ -627,4 +627,4 @@ resultado:
     }
 ]
 
-- POST, crear reporte: 
+- POST, crear reporte: /api/reportes-service/segun-plan?rangoPersonas=1-2 personas&fechaReserva=2025-02-01&monto=24900&esSuma=true
