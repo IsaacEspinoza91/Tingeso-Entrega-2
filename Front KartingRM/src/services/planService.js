@@ -1,11 +1,14 @@
 import httpClient from '../http-common';
+import axios from 'axios';
 
-const URL_LOCAL = '/planes';
+
+const URL_LOCAL = '/api/plan/planes';
+const API_URL = 'http://localhost:8080/api/plan/planes/';
 
 // Peticion GET de todos los planes
 export const getPlanes = async () => {
   try {
-    const response = await httpClient.get(`${URL_LOCAL}/`);
+    const response = await axios.get(API_URL);
     return response.data;
   } catch (error) {
     console.error('Error al obtener planes:', error);
@@ -14,9 +17,9 @@ export const getPlanes = async () => {
 };
 
 /// Peticion GET de plan segun id
-export const getPlanById = async (idPlan) => {
+export const getPlanById = async (id) => {
   try {
-    const response = await httpClient.get(`${URL_LOCAL}/${idPlan}`);
+    const response = await axios.get(`${API_URL}${id}`);
     return response.data;
   } catch (error) {
     console.error(`Error al obtener plan con ID ${idPlan}:`, error);
@@ -27,7 +30,7 @@ export const getPlanById = async (idPlan) => {
 // Peticion POST para crear plan
 export const createPlan = async (planData) => {
   try {
-    const response = await httpClient.post(`${URL_LOCAL}/`, planData);
+    const response = await axios.post(API_URL, planData);
     return response.data;
   } catch (error) {
     console.error('Error al crear plan:', error);
@@ -36,9 +39,9 @@ export const createPlan = async (planData) => {
 };
 
 // Peticion PUT para update de plan, segun id y body
-export const updatePlan = async (idPlan, planData) => {
+export const updatePlan = async (id, planData) => {
   try {
-    const response = await httpClient.put(`${URL_LOCAL}/${idPlan}`, planData);
+    const response = await axios.put(`${API_URL}${id}`, planData);
     return response.data;
   } catch (error) {
     console.error(`Error al actualizar plan con ID ${idPlan}:`, error);
@@ -47,10 +50,10 @@ export const updatePlan = async (idPlan, planData) => {
 };
 
 // Peticion DELETE para eliminar plan
-export const deletePlan = async (idPlan) => {
+export const deletePlan = async (id) => {
   try {
-    await httpClient.delete(`${URL_LOCAL}/${idPlan}`);
-    return idPlan;
+    const response = await axios.delete(`${API_URL}${id}`);
+    return response.data;
   } catch (error) {
     console.error(`Error al eliminar plan con ID ${idPlan}:`, error);
     throw error;

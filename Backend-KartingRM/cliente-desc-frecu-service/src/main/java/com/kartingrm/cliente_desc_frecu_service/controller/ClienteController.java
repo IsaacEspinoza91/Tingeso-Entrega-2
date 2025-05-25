@@ -35,6 +35,18 @@ public class ClienteController {
         return ResponseEntity.ok(clientes);
     }
 
+    @GetMapping("/rut/{rut}")
+    public ResponseEntity<Cliente> getClienteByRut(@PathVariable String rut) {
+        Cliente cliente = clienteService.getClienteByRut(rut);
+        return ResponseEntity.ok(cliente);
+    }
+
+    @GetMapping("/nombre/{nombre}/apellido/{apellido}")
+    public ResponseEntity<List<Cliente>> getClientesByNombreApellido(@PathVariable String nombre, @PathVariable String apellido) {
+        List<Cliente> clientes = clienteService.getClientesByNombreApellido(nombre, apellido);
+        return ResponseEntity.ok(clientes);
+    }
+
     @GetMapping("/{id_cliente}")
     public ResponseEntity<Cliente> getClienteById(@PathVariable Long id_cliente) {
         Cliente cliente = clienteService.getClienteById(id_cliente);

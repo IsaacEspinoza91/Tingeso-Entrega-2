@@ -3,6 +3,7 @@ MC1: plan-service
 - GET, obtener todas los planes: http://localhost:8080/api/plan/planes/
 - GET, obtener plan por id: http://localhost:8080/api/plan/planes/2
 - POST, crear plan: http://localhost:8080/api/plan/planes/
+body
 {
     "descripcion": "10 vueltas o max 10 min",
     "duracionTotal": 20,
@@ -12,6 +13,7 @@ MC1: plan-service
 }
 
 - PUT, update plan: http://localhost:8080/api/plan/planes/2
+body
 {
     "descripcion": "10 vueltas o max 10 min",
     "duracionTotal": 25,
@@ -55,7 +57,11 @@ resultado: double
 MC3: cliente-desc-frecu-service
 	--- Cliente ---    CRUD
 - GET, obtener todos los clientes: http://localhost:8080/api/cliente-service/cliente/
+- GET, obtener todos clientes activos: http://localhost:8080/api/cliente-service/cliente/activos
+- GET, obtener todos los clientes inactivos: http://localhost:8080/api/cliente-service/cliente/inactivos
 - GET, obtener cliente según id: http://localhost:8080/api/cliente-service/cliente/2
+- GET, obtener cliente según rut: http://localhost:8080/api/cliente-service/cliente/rut/{rut}
+- GET, obtener clientes según nombre y apellido: http://localhost:8080/api/cliente-service/cliente/nombre/{nombre}/apellido/{apellido}
 - POST, crear cliente (activo true default): http://localhost:8080/api/cliente-service/cliente/
 {
     "rut": "21274232-2",

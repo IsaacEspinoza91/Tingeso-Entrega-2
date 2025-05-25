@@ -1,44 +1,55 @@
 import httpClient from '../http-common';
 
-const URL_LOCAL = '/clientes';
+const BASE_URL = 'http://localhost:8080/api/cliente-service/cliente';
 
-// Peticion GET de obtener todos los clientes
+// Petición GET para obtener todos los clientes
 export const getClientes = async () => {
   try {
-    const response = await httpClient.get(`${URL_LOCAL}/`);
+    const response = await httpClient.get(`${BASE_URL}/`);
     return response.data;
   } catch (error) {
-    console.error('Error al obtener clientes:', error);
+    console.error('Error al obtener todos los clientes:', error);
     throw error;
   }
 };
 
-// Peticion POST de creacion de cliente
-export const createCliente = async (clienteData) => {
+// Petición GET para obtener solo clientes activos
+export const getClientesActivos = async () => {
   try {
-    const response = await httpClient.post(`${URL_LOCAL}/`, clienteData);
+    const response = await httpClient.get(`${BASE_URL}/activos`);
     return response.data;
   } catch (error) {
-    console.error('Error al crear cliente:', error);
+    console.error('Error al obtener clientes activos:', error);
     throw error;
   }
 };
 
-// Peticion GET de cliente segun id
-export const getClienteById = async (idKart) => {
+// Petición GET para obtener solo clientes inactivos
+export const getClientesInactivos = async () => {
   try {
-    const response = await httpClient.get(`${URL_LOCAL}/${idKart}`);
+    const response = await httpClient.get(`${BASE_URL}/inactivos`);
     return response.data;
   } catch (error) {
-    console.error(`Error al obtener cliente con ID ${idKart}:`, error);
+    console.error('Error al obtener clientes inactivos:', error);
     throw error;
   }
 };
 
-// Peticion GET de cliente segun rut
+// Petición GET para obtener cliente por ID
+export const getClienteById = async (id) => {
+  try {
+    const response = await httpClient.get(`${BASE_URL}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al obtener cliente con ID ${id}:`, error);
+    throw error;
+  }
+};
+
+// Petición GET para obtener cliente por RUT
 export const getClienteByRut = async (rut) => {
   try {
-    const response = await httpClient.get(`${URL_LOCAL}/rut/${rut}`);
+    const response = await httpClient.get(`${BASE_URL}/rut/${rut}`);
     return response.data;
   } catch (error) {
     console.error(`Error al obtener cliente con RUT ${rut}:`, error);
@@ -46,10 +57,10 @@ export const getClienteByRut = async (rut) => {
   }
 };
 
-// Peticion GET de cliente/s segun nombre y apellido
+// Petición GET para obtener clientes por nombre y apellido
 export const getClientesByNombreApellido = async (nombre, apellido) => {
   try {
-    const response = await httpClient.get(`${URL_LOCAL}/nombre/${nombre}/${apellido}`);
+    const response = await httpClient.get(`${BASE_URL}/nombre/${nombre}/apellido/${apellido}`);
     return response.data;
   } catch (error) {
     console.error(`Error al buscar clientes por nombre ${nombre} y apellido ${apellido}:`, error);
@@ -57,24 +68,57 @@ export const getClientesByNombreApellido = async (nombre, apellido) => {
   }
 };
 
-// Peticion PUT de update de cliente segun id y body
-export const updateCliente = async (idKart, clienteData) => {
+// Petición POST para crear un nuevo cliente
+export const createCliente = async (clienteData) => {
   try {
-    const response = await httpClient.put(`${URL_LOCAL}/${idKart}`, clienteData);
+    const response = await httpClient.post(`${BASE_URL}/`, clienteData);
     return response.data;
   } catch (error) {
-    console.error(`Error al actualizar cliente con ID ${idKart}:`, error);
+    console.error('Error al crear cliente:', error);
     throw error;
   }
 };
 
-// Peticion DELETE para eliminar un cliente 
-export const deleteCliente = async (idKart) => {
+// Petición PUT para actualizar un cliente
+export const updateCliente = async (id, clienteData) => {
   try {
-    await httpClient.delete(`${URL_LOCAL}/${idKart}`);
+    const response = await httpClient.put(`${BASE_URL}/${id}`, clienteData);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al actualizar cliente con ID ${id}:`, error);
+    throw error;
+  }
+};
+
+// Petición DELETE para eliminar un cliente
+export const deleteCliente = async (id) => {
+  try {
+    await httpClient.delete(`${BASE_URL}/${id}`);
     return id; // Retornamos el ID eliminado para referencia
   } catch (error) {
-    console.error(`Error al eliminar cliente con ID ${idKart}:`, error);
+    console.error(`Error al eliminar cliente con ID ${id}:`, error);
+    throw error;
+  }
+};
+
+// Petición PUT para desactivar un cliente
+export const desactivarCliente = async (id) => {
+  try {
+    const response = await httpClient.put(`${BASE_URL}/inactivate/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al desactivar cliente con ID ${id}:`, error);
+    throw error;
+  }
+};
+
+// Petición PUT para activar un cliente
+export const activarCliente = async (id) => {
+  try {
+    const response = await httpClient.put(`${BASE_URL}/activate/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al activar cliente con ID ${id}:`, error);
     throw error;
   }
 };

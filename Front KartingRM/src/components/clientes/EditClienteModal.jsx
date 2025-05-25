@@ -23,7 +23,8 @@ const EditClienteModal = ({ cliente, onClose, onUpdate }) => {
         apellido: cliente.apellido || '',
         correo: cliente.correo || '',
         telefono: cliente.telefono || '',
-        fechaNacimiento: cliente.fechaNacimiento ? cliente.fechaNacimiento.split('T')[0] : ''
+        fechaNacimiento: cliente.fechaNacimiento ? cliente.fechaNacimiento.split('T')[0] : '',
+        activo: cliente.activo
       });
     }
   }, [cliente]);
@@ -38,7 +39,7 @@ const EditClienteModal = ({ cliente, onClose, onUpdate }) => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.rut) newErrors.rut = 'RUT es requerido';
     if (!formData.nombre) newErrors.nombre = 'Nombre es requerido';
     if (!formData.apellido) newErrors.apellido = 'Apellido es requerido';
@@ -56,7 +57,7 @@ const EditClienteModal = ({ cliente, onClose, onUpdate }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -81,7 +82,7 @@ const EditClienteModal = ({ cliente, onClose, onUpdate }) => {
           <h3>Editar Cliente</h3>
           <button onClick={onClose} className="close-button">&times;</button>
         </div>
-        
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>RUT:</label>

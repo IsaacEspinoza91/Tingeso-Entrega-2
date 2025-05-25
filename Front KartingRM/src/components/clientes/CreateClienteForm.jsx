@@ -9,7 +9,8 @@ const CreateClienteForm = ({ onClienteCreated }) => {
     apellido: '',
     correo: '',
     telefono: '',
-    fechaNacimiento: ''
+    fechaNacimiento: '',
+    activo: true
   });
 
   const [errors, setErrors] = useState({});
@@ -26,7 +27,7 @@ const CreateClienteForm = ({ onClienteCreated }) => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.rut) newErrors.rut = 'RUT es requerido';
     if (!formData.nombre) newErrors.nombre = 'Nombre es requerido';
     if (!formData.apellido) newErrors.apellido = 'Apellido es requerido';
@@ -44,7 +45,7 @@ const CreateClienteForm = ({ onClienteCreated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -59,12 +60,12 @@ const CreateClienteForm = ({ onClienteCreated }) => {
         telefono: '',
         fechaNacimiento: ''
       });
-      
+
       // Actualizar la lista de clientes
       if (onClienteCreated) {
         onClienteCreated();
       }
-      
+
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
       console.error('Error al crear cliente:', error);
@@ -79,7 +80,7 @@ const CreateClienteForm = ({ onClienteCreated }) => {
       <h3>Crear Nuevo Cliente</h3>
       {successMessage && <div className="success-message">{successMessage}</div>}
       {errors.submit && <div className="error-message">{errors.submit}</div>}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>RUT:</label>

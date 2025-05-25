@@ -41,6 +41,20 @@ public class ClienteService {
         return cliente.get();
     }
 
+    public Cliente getClienteByRut(String rut) {
+        Optional<Cliente> cliente = clienteRepository.findClienteByRut(rut);
+        if (cliente.isEmpty()) throw new EntityNotFoundException("Cliente rut " + rut + " no encontrado");
+
+        return cliente.get();
+    }
+
+    public List<Cliente> getClientesByNombreApellido(String nombre, String apellido) {
+        Optional<List<Cliente>> cliente = clienteRepository.findClienteByNombreAndApellido(nombre, apellido);
+        if (cliente.isEmpty()) throw new EntityNotFoundException("Cliente no encontrado");
+
+        return cliente.get();
+    }
+
     public Cliente createCliente(Cliente cliente) {
         Cliente clienteCreado =  clienteRepository.save(cliente);
 
