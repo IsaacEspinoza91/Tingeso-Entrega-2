@@ -503,4 +503,128 @@ resultado:
 
 
 MC7: reportes-service
-mañana lo hago, ya son las 4 am
+	--- Reportes_ingresos_personas ---
+GET, reporte:  http://localhost:8080/api/reportes-service/segun-rango-personas?mes_inicio=4&anio_inicio=2025&mes_fin=8&anio_fin=2025
+resultado:
+[
+    {
+        "rangoPersonas": "1-2 personas",
+        "ingresosPorMes": {
+            "Abril-2025": 0.0,
+            "Mayo-2025": 88298.0,
+            "Junio-2025": 0.0,
+            "Julio-2025": 0.0,
+            "Agosto-2025": 0.0
+        },
+        "total": 88298.0,
+        "esTotalGeneral": false
+    },
+    {
+        "rangoPersonas": "3-5 personas",
+        "ingresosPorMes": {
+            "Abril-2025": 0.0,
+            "Mayo-2025": 0.0,
+            "Junio-2025": 0.0,
+            "Julio-2025": 0.0,
+            "Agosto-2025": 0.0
+        },
+        "total": 0.0,
+        "esTotalGeneral": false
+    },
+    {
+        "rangoPersonas": "6-10 personas",
+        "ingresosPorMes": {
+            "Abril-2025": 68800.0,
+            "Mayo-2025": 0.0,
+            "Junio-2025": 0.0,
+            "Julio-2025": 0.0,
+            "Agosto-2025": 0.0
+        },
+        "total": 68800.0,
+        "esTotalGeneral": false
+    },
+    {
+        "rangoPersonas": "11-15 personas",
+        "ingresosPorMes": {
+            "Abril-2025": 0.0,
+            "Mayo-2025": 16326.8,
+            "Junio-2025": 0.0,
+            "Julio-2025": 0.0,
+            "Agosto-2025": 0.0
+        },
+        "total": 16326.8,
+        "esTotalGeneral": false
+    },
+    {
+        "rangoPersonas": "TOTAL GENERAL",
+        "ingresosPorMes": {
+            "Abril-2025": 68800.0,
+            "Mayo-2025": 104624.8,
+            "Junio-2025": 0.0,
+            "Julio-2025": 0.0,
+            "Agosto-2025": 0.0
+        },
+        "total": 173424.8,
+        "esTotalGeneral": true
+    }
+]
+
+- POST, crear reporte: /api/reportes-service/segun-rango-personas?rangoPersonas=1-2 personas&fechaReserva=2025-02-01&monto=24900&esSuma=true
+
+
+
+	--- Reportes_ingresos_plan ---
+- GET, reportes según plan: http://localhost:8080/api/reportes-service/segun-plan?mes_inicio=4&anio_inicio=2025&mes_fin=8&anio_fin=2025
+resultado:
+[
+    {
+        "descripcionPlan": "20 vueltas o max 20 min",
+        "ingresosPorMes": {
+            "Abril-2025": 68800.0,
+            "Mayo-2025": 67734.8,
+            "Junio-2025": 0.0,
+            "Julio-2025": 0.0,
+            "Agosto-2025": 0.0
+        },
+        "total": 136534.8,
+        "esTotalGeneral": false
+    },
+    {
+        "descripcionPlan": "15 vueltas o max 15 min",
+        "ingresosPorMes": {
+            "Abril-2025": 0.0,
+            "Mayo-2025": 21420.0,
+            "Junio-2025": 0.0,
+            "Julio-2025": 0.0,
+            "Agosto-2025": 0.0
+        },
+        "total": 21420.0,
+        "esTotalGeneral": false
+    },
+    {
+        "descripcionPlan": "10 vueltas o max 10 min",
+        "ingresosPorMes": {
+            "Abril-2025": 0.0,
+            "Mayo-2025": 15470.0,
+            "Junio-2025": 0.0,
+            "Julio-2025": 0.0,
+            "Agosto-2025": 0.0
+        },
+        "total": 15470.0,
+        "esTotalGeneral": false
+    },
+    {
+        "descripcionPlan": "TOTAL GENERAL",
+        "ingresosPorMes": {
+            "Abril-2025": 68800.0,
+            "Mayo-2025": 104624.8,
+            "Junio-2025": 0.0,
+            "Julio-2025": 0.0,
+            "Agosto-2025": 0.0
+        },
+        "total": 173424.8,
+        "esTotalGeneral": true
+    }
+]
+
+- POST, crear reporte: 

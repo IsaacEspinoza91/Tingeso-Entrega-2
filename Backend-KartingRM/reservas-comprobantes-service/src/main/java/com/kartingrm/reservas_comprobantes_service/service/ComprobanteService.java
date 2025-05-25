@@ -100,7 +100,7 @@ public class ComprobanteService {
         int totalPersonas = reserva.getTotalPersonas();
 
         // Obtener tarifa para cada integrante
-        double tarifaIntegrante = (double) tarifaBase / totalPersonas;  // Casteo
+        double tarifaIntegrante = tarifaBase / totalPersonas;  // Casteo
         // Obtner descuento extra para cada integrante
         double descuenteExtraIntegrante = descuentoExtra / totalPersonas;
 
@@ -148,8 +148,34 @@ public class ComprobanteService {
 
         }
 
-
+        // Actualizacion del total del comprobante, considerando que ya estan creados los detalles
         actualizarTotalComprobante(comprobante);
+
+        PlanDTO plan = restTemplate.getForObject("http://plan-service/api/plan/planes/" + reserva.getIdPlan(), PlanDTO.class);
+
+        // Logica para poblar tabla de reportes
+
+        // Reportes segun cantidad integrantes
+        // Creacion o actualizacion de registro en tabla reporte segun cantidad grupos
+        String rangoPersonas = determinarRangoPersonas(reserva.getTotalPersonas());
+        // Peticion HTTP POST, notificar al servicio de reportes MC7 sobre el total del comprobante
+        notificarReporteIngresosCantidadIntegrantesPeticionPOST(
+                rangoPersonas,
+                reserva.getFecha(),
+                comprobante.getTotal(),
+                true
+        );
+
+        // Reportes segun planes
+        notificarReporteIngresosPlan(
+                plan.getId(),
+                plan.getDescripcion(),
+                reserva.getFecha(),
+                comprobante.getTotal(),
+                true
+        );
+
+
 
         // Crear objeto Reserva DTO
         ReservaDTO reservaDTO = new ReservaDTO();
@@ -159,9 +185,8 @@ public class ComprobanteService {
         reservaDTO.setHoraFin(reserva.getHoraFin());
         reservaDTO.setEstado(reserva.getEstado());
         reservaDTO.setTotalPersonas(reserva.getTotalPersonas());
-        // Obtener objetos cliente y plan mediante peticion http
+        // Obtener objetos cliente mediante peticion http
         ClienteDTO cliente = restTemplate.getForObject("http://cliente-desc-frecu-service/api/cliente-service/cliente/" + reserva.getIdReservante(), ClienteDTO.class);
-        PlanDTO plan = restTemplate.getForObject("http://plan-service/api/plan/planes/" + reserva.getIdPlan(), PlanDTO.class);
         reservaDTO.setPlan(plan);
         reservaDTO.setReservante(cliente);
 
@@ -258,6 +283,33 @@ public class ComprobanteService {
                 .orElseThrow(() -> new EntityNotFoundException("Comprobante no encontrado"));
 
         comprobante.setPagado(pagado);
+
+        // Obtener reserva y plan
+        Reserva reserva = reservaService.getReservaById(comprobante.getIdReserva());
+        PlanDTO plan = restTemplate.getForObject("http://plan-service/api/plan/planes/" + reserva.getIdPlan(), PlanDTO.class);
+
+        // Creacion o actualizacion de registro en tabla reporte segun cantidad grupos
+        boolean comprobantePagado = false;
+        if (comprobante.isPagado()) comprobantePagado = true;
+
+        String rangoPersonas = determinarRangoPersonas(reserva.getTotalPersonas());
+        notificarReporteIngresosCantidadIntegrantesPeticionPOST(
+                rangoPersonas,
+                reserva.getFecha(),
+                comprobante.getTotal(),
+                comprobantePagado
+        );
+
+
+        // Creacion de registro reportes segun planes
+        notificarReporteIngresosPlan(
+                plan.getId(),
+                plan.getDescripcion(),
+                reserva.getFecha(),
+                comprobante.getTotal(),
+                comprobantePagado
+        );
+
         return comprobanteRepository.save(comprobante);
     }
 
@@ -265,12 +317,36 @@ public class ComprobanteService {
     public boolean deleteComprobante(Long idComprobante) {
         // Eliminar detalles de comprobante
         List<DetalleComprobante> detallesOriginales = detalleComprobanteRepository.findDetalleComprobantesByIdComprobante(idComprobante);
-        for (DetalleComprobante detalleActual : detallesOriginales) {
-            detalleComprobanteRepository.delete(detalleActual);
-        }
+        detalleComprobanteRepository.deleteAll(detallesOriginales);
+
+        // Get comprobante, reserva y plan
+        Comprobante comprobante = comprobanteRepository.findById(idComprobante)
+                .orElseThrow(() -> new EntityNotFoundException("Comprobante no encontrado"));
+        Reserva reserva = reservaService.getReservaById(comprobante.getIdReserva());
+        PlanDTO plan = restTemplate.getForObject("http://plan-service/api/plan/planes/" + reserva.getIdPlan(), PlanDTO.class);
 
         // Eliminar comprobante
         comprobanteRepository.deleteById(idComprobante);
+
+        // Peticion http
+        // Creacion o actualizacion de registro en tabla reporte segun cantidad grupos
+        String rangoPersonas = determinarRangoPersonas(reserva.getTotalPersonas());
+        notificarReporteIngresosCantidadIntegrantesPeticionPOST(
+                rangoPersonas,
+                reserva.getFecha(),
+                comprobante.getTotal(),
+                false
+        );
+
+        // Creacion de registro reportes segun planes
+        notificarReporteIngresosPlan(
+                plan.getId(),
+                plan.getDescripcion(),
+                reserva.getFecha(),
+                comprobante.getTotal(),
+                false
+        );
+
         return true;
     }
 
@@ -357,6 +433,39 @@ public class ComprobanteService {
         }
         comprobante.setTotal(total);
         comprobanteRepository.save(comprobante);
+    }
+
+
+    // Realizacion de peticion POST para crear o actualizar la tabla de reportes segun grupo en el micro servicio 7
+    private void notificarReporteIngresosCantidadIntegrantesPeticionPOST(String rangoPersonas, LocalDate fecha, Double monto, boolean esSuma) {
+        String url = "http://reportes-service/api/reportes-service/segun-rango-personas/actualizar" +
+                "?rangoPersonas=" + rangoPersonas +
+                "&fechaReserva=" + fecha.toString() +
+                "&monto=" + monto +
+                "&esSuma=" + esSuma;
+
+        restTemplate.postForEntity(url, null, Void.class);
+    }
+
+    // Crea string para indicar el rango de personas
+    private String determinarRangoPersonas(int cantidad) {
+        if (cantidad <= 2) return "1-2 personas";
+        if (cantidad <= 5) return "3-5 personas";
+        if (cantidad <= 10) return "6-10 personas";
+        return "11-15 personas";
+    }
+
+
+    // Realizacion de peticion POST para poblar tabla de reportes segun plan en el microservicio 7
+    private void notificarReporteIngresosPlan(Long idPlan, String descripcionPlan, LocalDate fecha, Double monto, boolean esSuma) {
+        String url = "http://reportes-service/api/reportes-service/segun-plan/actualizar" +
+                "?idPlan=" + idPlan +
+                "&descripcionPlan=" + descripcionPlan +
+                "&fechaReserva=" + fecha.toString() +
+                "&monto=" + monto +
+                "&esSuma=" + esSuma;
+
+        restTemplate.postForEntity(url, null, Void.class);
     }
 
 }

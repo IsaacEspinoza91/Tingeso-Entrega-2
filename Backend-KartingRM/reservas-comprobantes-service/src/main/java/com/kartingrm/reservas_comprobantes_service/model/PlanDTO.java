@@ -3,7 +3,7 @@ package com.kartingrm.reservas_comprobantes_service.model;
 
 public class PlanDTO {
 
-    private int id;
+    private Long id;
     private String descripcion;
     private int duracionTotal;
     private Double precioRegular;
@@ -21,7 +21,7 @@ public class PlanDTO {
         this.precioFeriado = precioFeriado;
     }
 
-    public PlanDTO(int id, String descripcion, int duracionTotal, Double precioRegular, Double precioFinSemana, Double precioFeriado) {
+    public PlanDTO(Long id, String descripcion, int duracionTotal, Double precioRegular, Double precioFinSemana, Double precioFeriado) {
         this.id = id;
         this.descripcion = descripcion;
         this.duracionTotal = duracionTotal;
@@ -30,13 +30,14 @@ public class PlanDTO {
         this.precioFeriado = precioFeriado;
     }
 
-
     // getters y setters
-    public int getId() {
+
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
