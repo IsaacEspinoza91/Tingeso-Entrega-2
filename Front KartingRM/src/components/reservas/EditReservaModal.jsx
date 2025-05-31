@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  updateReserva,
-  updateClienteReserva,
-  updatePlanReserva
-} from '../../services/reservaService';
+import { updateReserva } from '../../services/reservaService';
 import './EditReservaModal.css';
 
 const estadosReserva = [
@@ -14,12 +10,11 @@ const estadosReserva = [
 
 const EditReservaModal = ({ reserva, onClose, onUpdate }) => {
   const [formData, setFormData] = useState({
-    estado: '',
+    estado: 'confirmada',
     totalPersonas: 1,
     fecha: '',
     horaInicio: '',
-    horaFin: '',
-    idCliente: '',
+    idReservante: '',
     idPlan: ''
   });
 
@@ -33,9 +28,8 @@ const EditReservaModal = ({ reserva, onClose, onUpdate }) => {
         totalPersonas: reserva.totalPersonas || 1,
         fecha: reserva.fecha || '',
         horaInicio: reserva.horaInicio || '',
-        horaFin: reserva.horaFin || '',
-        idCliente: reserva.reservante?.id || '',
-        idPlan: reserva.plan?.idPlan || ''
+        idReservante: reserva.reservante?.id || '',
+        idPlan: reserva.plan?.id || ''
       });
     }
   }, [reserva]);
@@ -44,17 +38,21 @@ const EditReservaModal = ({ reserva, onClose, onUpdate }) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: name === 'totalPersonas' || name === 'idReservante' || name === 'idPlan'
+        ? Number(value)
+        : value
     });
   };
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.estado) newErrors.estado = 'Estado es requerido';
     if (!formData.totalPersonas || formData.totalPersonas < 1) newErrors.totalPersonas = 'Número de personas inválido';
     if (!formData.fecha) newErrors.fecha = 'Fecha es requerida';
     if (!formData.horaInicio) newErrors.horaInicio = 'Hora de inicio es requerida';
+    if (!formData.idReservante) newErrors.idReservante = 'ID Reservante es requerido';
+    if (!formData.idPlan) newErrors.idPlan = 'ID Plan es requerido';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -62,33 +60,29 @@ const EditReservaModal = ({ reserva, onClose, onUpdate }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setIsSubmitting(true);
     try {
-      // Actualizar datos reserva
       const reservaData = {
-        estado: formData.estado,
-        totalPersonas: parseInt(formData.totalPersonas),
         fecha: formData.fecha,
         horaInicio: formData.horaInicio,
-        horaFin: formData.horaFin || null
+        estado: formData.estado,
+        totalPersonas: formData.totalPersonas,
+        idPlan: formData.idPlan,
+        idReservante: formData.idReservante
       };
 
-      const updatedReserva = await updateReserva(reserva.idReserva, reservaData);
+      await updateReserva(reserva.id, reservaData);
 
-      // Actualizar cliente
-      if (formData.idCliente !== reserva.reservante.id) {
-        await updateClienteReserva(reserva.idReserva, formData.idCliente);
-        updatedReserva.reservante.id = formData.idCliente;
-      }
-
-      // Actualizar plan
-      if (formData.idPlan !== reserva.plan.idPlan) {
-        await updatePlanReserva(reserva.idReserva, formData.idPlan);
-        updatedReserva.plan.idPlan = formData.idPlan;
-      }
+      // Crear objeto actualizado manualmente si el backend no devuelve todos los datos
+      const updatedReserva = {
+        ...reserva,
+        ...reservaData,
+        plan: { id: formData.idPlan, ...reserva.plan },
+        reservante: { id: formData.idReservante, ...reserva.reservante }
+      };
 
       onUpdate(updatedReserva);
       onClose();
@@ -106,21 +100,24 @@ const EditReservaModal = ({ reserva, onClose, onUpdate }) => {
     <div className="modal-overlay">
       <div className="modal-content">
         <div className="modal-header">
-          <h3>Editar Reserva #{reserva.idReserva}</h3>
+          <h3>Editar Reserva #{reserva.id}</h3>
           <button onClick={onClose} className="close-button">&times;</button>
         </div>
-        
+
+        <form onSubmit={handleSubmit}></form>
+
         <form onSubmit={handleSubmit}>
           <div className="form-row">
             <div className="form-group">
               <label>ID Cliente Reservante:</label>
               <input
                 type="number"
-                name="idCliente"
-                value={formData.idCliente}
+                name="idReservante"
+                value={formData.idReservante || ''}
                 onChange={handleChange}
                 min="1"
               />
+              {errors.idReservante && <span className="error">{errors.idReservante}</span>}
             </div>
 
             <div className="form-group">
@@ -128,10 +125,11 @@ const EditReservaModal = ({ reserva, onClose, onUpdate }) => {
               <input
                 type="number"
                 name="idPlan"
-                value={formData.idPlan}
+                value={formData.idPlan || ''}
                 onChange={handleChange}
                 min="1"
               />
+              {errors.idPlan && <span className="error">{errors.idPlan}</span>}
             </div>
           </div>
 

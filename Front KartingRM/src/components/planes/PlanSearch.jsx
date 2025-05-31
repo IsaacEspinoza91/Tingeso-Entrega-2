@@ -9,7 +9,7 @@ const PlanSearch = ({ onSearchResults }) => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    
+
     if (!searchValue.trim()) {
       setError('Por favor ingrese un ID de plan');
       return;
@@ -51,8 +51,8 @@ const PlanSearch = ({ onSearchResults }) => {
             <button type="submit" disabled={isSearching || !searchValue.trim()}>
               {isSearching ? 'Buscando...' : 'Buscar'}
             </button>
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={handleReset}
               className="reset-button"
             >

@@ -1,6 +1,6 @@
 import httpClient from '../http-common';
 
-const BASE_URL = 'http://localhost:8080/api/cliente-service/cliente';
+const BASE_URL = '/api/cliente-service/cliente';
 
 // Petición GET para obtener todos los clientes
 export const getClientes = async () => {

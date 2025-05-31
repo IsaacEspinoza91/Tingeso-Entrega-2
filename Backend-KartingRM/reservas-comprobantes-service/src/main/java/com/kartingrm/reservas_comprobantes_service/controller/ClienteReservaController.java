@@ -1,6 +1,7 @@
 package com.kartingrm.reservas_comprobantes_service.controller;
 
 import com.kartingrm.reservas_comprobantes_service.entity.ClienteReserva;
+import com.kartingrm.reservas_comprobantes_service.model.ClienteDTO;
 import com.kartingrm.reservas_comprobantes_service.service.ClienteReservaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,12 @@ public class ClienteReservaController {
     @GetMapping("/reserva/{idReserva}")
     public List<ClienteReserva> obtenerIntegrantesByIdReserva(@PathVariable Long idReserva) {
         return service.obtenerIntegrantesByIdReserva(idReserva);
+    }
+
+    @GetMapping("/ClienteDTO/reserva/{id}")
+    public ResponseEntity<List<ClienteDTO>> getIntegrantesDTOByIdReserva(@PathVariable Long id) {
+        List<ClienteDTO> reserva =  service.obtenerIntegrantesDTOByIdReserva(id);
+        return ResponseEntity.ok(reserva);
     }
 
     @PostMapping("/agregar/cliente/{idCliente}/reserva/{idReserva}")

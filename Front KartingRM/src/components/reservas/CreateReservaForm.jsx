@@ -4,14 +4,13 @@ import './CreateReservaForm.css';
 
 const CreateReservaForm = ({ onReservaCreated }) => {
   const [formData, setFormData] = useState({
+    fecha: '',
+    horaInicio: '',
     estado: 'confirmada',
     totalPersonas: 1,
-    fecha: '',
-    horaInicio: ''
+    idPlan: '',
+    idReservante: ''
   });
-  const [idCliente, setIdCliente] = useState('');
-  const [idPlan, setIdPlan] = useState('');
-  const [feriado, setFeriado] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -20,15 +19,17 @@ const CreateReservaForm = ({ onReservaCreated }) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: name === 'totalPersonas' ? Number(value) : value
+      [name]: name === 'totalPersonas' || name === 'idPlan' || name === 'idReservante'
+        ? Number(value)
+        : value
     });
   };
 
   const validateForm = () => {
     const newErrors = {};
-    
-    if (!idCliente) newErrors.idCliente = 'ID Cliente es requerido';
-    if (!idPlan) newErrors.idPlan = 'ID Plan es requerido';
+
+    if (!formData.idReservante || formData.idReservante <= 0) newErrors.idReservante = 'ID Cliente es requerido';
+    if (!formData.idPlan || formData.idPlan <= 0) newErrors.idPlan = 'ID Plan es requerido';
     if (!formData.estado) newErrors.estado = 'Estado es requerido';
     if (formData.totalPersonas <= 0) newErrors.totalPersonas = 'Debe haber al menos 1 persona';
     if (!formData.fecha) newErrors.fecha = 'Fecha es requerida';
@@ -40,32 +41,42 @@ const CreateReservaForm = ({ onReservaCreated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setIsSubmitting(true);
     try {
-      await createReserva(idCliente, idPlan, feriado, formData);
+      // Preparamos el objeto según lo que espera el backend
+      const reservaData = {
+        fecha: formData.fecha,
+        horaInicio: formData.horaInicio,
+        estado: formData.estado,
+        totalPersonas: formData.totalPersonas,
+        idPlan: formData.idPlan,
+        idReservante: formData.idReservante
+      };
+
+      await createReserva(reservaData);
       setSuccessMessage('Reserva creada exitosamente!');
+
+      // Resetear el formulario
       setFormData({
-        estado: 'confirmada',
-        totalPersonas: 1,
         fecha: '',
         horaInicio: '',
-        horaFin: ''
+        estado: 'confirmada',
+        totalPersonas: 1,
+        idPlan: '',
+        idReservante: ''
       });
-      setIdCliente('');
-      setIdPlan('');
-      setFeriado(false);
-      
+
       if (onReservaCreated) {
         onReservaCreated();
       }
-      
+
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
       console.error('Error al crear reserva:', error);
-      setErrors({ submit: 'Error al crear reserva. Verifique los IDs, horario válido o intente nuevamente.' });
+      setErrors({ submit: 'Error al crear reserva. Verifique los datos e intente nuevamente.' });
     } finally {
       setIsSubmitting(false);
     }
@@ -76,40 +87,31 @@ const CreateReservaForm = ({ onReservaCreated }) => {
       <h3>Crear Nueva Reserva</h3>
       {successMessage && <div className="success-message">{successMessage}</div>}
       {errors.submit && <div className="error-message">{errors.submit}</div>}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="form-row">
           <div className="form-group">
             <label>ID Cliente Reservante:</label>
             <input
               type="number"
-              value={idCliente}
-              onChange={(e) => setIdCliente(e.target.value)}
+              name="idReservante"
+              value={formData.idReservante || ''}
+              onChange={handleChange}
               min="1"
             />
-            {errors.idCliente && <span className="error">{errors.idCliente}</span>}
+            {errors.idReservante && <span className="error">{errors.idReservante}</span>}
           </div>
 
           <div className="form-group">
             <label>ID Plan:</label>
             <input
               type="number"
-              value={idPlan}
-              onChange={(e) => setIdPlan(e.target.value)}
+              name="idPlan"
+              value={formData.idPlan || ''}
+              onChange={handleChange}
               min="1"
             />
             {errors.idPlan && <span className="error">{errors.idPlan}</span>}
-          </div>
-
-          <div className="form-group checkbox-group">
-            <label>
-              <input
-                type="checkbox"
-                checked={feriado}
-                onChange={(e) => setFeriado(e.target.checked)}
-              />
-              ¿Es día feriado?
-            </label>
           </div>
         </div>
 

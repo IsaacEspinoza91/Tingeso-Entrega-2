@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getReservas, deleteReserva } from '../../services/reservaService';
+import { getReservas, deleteReserva, getIntegrantes } from '../../services/reservaService';
 import CreateReservaForm from './CreateReservaForm';
 import ReservaSearch from './ReservaSearch';
 import EditReservaModal from './EditReservaModal';
@@ -17,6 +17,8 @@ const ReservasList = () => {
   const [viewingIntegrantes, setViewingIntegrantes] = useState(null);
   const [deletingReserva, setDeletingReserva] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [integrantes, setIntegrantes] = useState([]);
+  const [loadingIntegrantes, setLoadingIntegrantes] = useState(false);
 
   const fetchReservas = async () => {
     try {
@@ -29,9 +31,27 @@ const ReservasList = () => {
     }
   };
 
+  const fetchIntegrantes = async (idReserva) => {
+    setLoadingIntegrantes(true);
+    try {
+      const data = await getIntegrantes(idReserva);
+      setIntegrantes(data);
+      setLoadingIntegrantes(false);
+    } catch (err) {
+      console.error('Error al obtener integrantes:', err);
+      setLoadingIntegrantes(false);
+    }
+  };
+
   useEffect(() => {
     fetchReservas();
   }, []);
+
+  useEffect(() => {
+    if (viewingIntegrantes) {
+      fetchIntegrantes(viewingIntegrantes.id);
+    }
+  }, [viewingIntegrantes]);
 
   const handleReservaCreated = () => {
     fetchReservas();
@@ -43,27 +63,27 @@ const ReservasList = () => {
   };
 
   const handleUpdateReserva = (updatedReserva) => {
-    setReservas(reservas.map(r => 
-      r.idReserva === updatedReserva.idReserva ? updatedReserva : r
+    setReservas(reservas.map(r =>
+      r.id === updatedReserva.id ? updatedReserva : r
     ));
-    
+
     if (filteredReservas) {
-      setFilteredReservas(filteredReservas.map(r => 
-        r.idReserva === updatedReserva.idReserva ? updatedReserva : r
+      setFilteredReservas(filteredReservas.map(r =>
+        r.id === updatedReserva.id ? updatedReserva : r
       ));
     }
   };
 
-  const handleDeleteReserva = async (idReserva) => {
+  const handleDeleteReserva = async (id) => {
     setIsDeleting(true);
     try {
-      await deleteReserva(idReserva);
-      setReservas(reservas.filter(r => r.idReserva !== idReserva));
-      
+      await deleteReserva(id);
+      setReservas(reservas.filter(r => r.id !== id));
+
       if (filteredReservas) {
-        setFilteredReservas(filteredReservas.filter(r => r.idReserva !== idReserva));
+        setFilteredReservas(filteredReservas.filter(r => r.id !== id));
       }
-      
+
       setDeletingReserva(null);
     } catch (error) {
       console.error('Error al eliminar reserva:', error);
@@ -81,7 +101,7 @@ const ReservasList = () => {
     <div className="reservas-container">
       <div className="reservas-header">
         <h2>Lista de Reservas</h2>
-        <button 
+        <button
           onClick={() => setShowCreateForm(!showCreateForm)}
           className="create-button"
         >
@@ -96,7 +116,7 @@ const ReservasList = () => {
       )}
 
       {editingReserva && (
-        <EditReservaModal 
+        <EditReservaModal
           reserva={editingReserva}
           onClose={() => setEditingReserva(null)}
           onUpdate={handleUpdateReserva}
@@ -104,19 +124,20 @@ const ReservasList = () => {
       )}
 
       {viewingIntegrantes && (
-        <IntegrantesModal 
+        <IntegrantesModal
           reserva={viewingIntegrantes}
+          integrantes={integrantes}
+          loading={loadingIntegrantes}
           onClose={() => setViewingIntegrantes(null)}
-          onUpdate={handleUpdateReserva}
         />
       )}
 
       {deletingReserva && (
-        <DeleteConfirmationModal 
+        <DeleteConfirmationModal
           item={deletingReserva}
           itemType="reserva"
           onClose={() => setDeletingReserva(null)}
-          onConfirm={handleDeleteReserva}
+          onConfirm={() => handleDeleteReserva(deletingReserva.id)}
         />
       )}
 
@@ -137,9 +158,9 @@ const ReservasList = () => {
         <tbody>
           {displayedReservas.length > 0 ? (
             displayedReservas.map((reserva) => (
-              <tr key={reserva.idReserva}>
-                <td>{reserva.idReserva}</td>
-                <td>{new Date(reserva.fecha+"T00:00:00").toLocaleDateString()}</td>
+              <tr key={reserva.id}>
+                <td>{reserva.id}</td>
+                <td>{new Date(reserva.fecha + "T00:00:00").toLocaleDateString()}</td>
                 <td>{reserva.horaInicio}</td>
                 <td>{reserva.horaFin || '-'}</td>
                 <td>
@@ -149,25 +170,25 @@ const ReservasList = () => {
                 </td>
                 <td>{reserva.totalPersonas}</td>
                 <td>
-                  {reserva.plan.idPlan} - {reserva.plan.descripcion}
+                  {reserva.plan.id} - {reserva.plan.descripcion}
                 </td>
                 <td>
                   {reserva.reservante.id} - {reserva.reservante.nombre} {reserva.reservante.apellido}
                 </td>
                 <td className="actions-cell">
-                  <button 
+                  <button
                     onClick={() => setEditingReserva(reserva)}
                     className="edit-button"
                   >
                     Editar
                   </button>
-                  <button 
+                  <button
                     onClick={() => setViewingIntegrantes(reserva)}
                     className="view-button"
                   >
                     Integrantes
                   </button>
-                  <button 
+                  <button
                     onClick={() => setDeletingReserva(reserva)}
                     className="delete-button"
                     disabled={isDeleting}

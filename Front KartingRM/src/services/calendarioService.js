@@ -1,6 +1,6 @@
 import httpClient from '../http-common';
 
-const URL_LOCAL = '/api/rack-semanal-service/get-rack/';
+const URL_LOCAL = '/api/rack-semanal-service/get-rack';
 
 export const getReservasSemana = async (semanaOffset = 0) => {
   try {

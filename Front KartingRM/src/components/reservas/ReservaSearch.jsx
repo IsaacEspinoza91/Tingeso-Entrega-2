@@ -10,7 +10,7 @@ const ReservaSearch = ({ onSearchResults }) => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    
+
     if (!searchValue.trim()) {
       setError('Por favor ingrese un valor para buscar');
       return;
@@ -22,14 +22,20 @@ const ReservaSearch = ({ onSearchResults }) => {
     try {
       let result;
       if (searchType === 'id') {
-        result = await getReservaById(searchValue);
-        onSearchResults([result]);
-      } else {
-        result = await getReservasByCliente(searchValue);
+        // El servicio getReservaById devuelve un array con una reserva
+        const response = await getReservaById(searchValue);
+        result = Array.isArray(response) ? response : [response];
         onSearchResults(result);
+      } else {
+        // El servicio getReservasByCliente devuelve un array de reservas
+        result = await getReservasByCliente(searchValue);
+        onSearchResults(Array.isArray(result) ? result : [result]);
       }
     } catch (err) {
-      setError(searchType === 'id' ? 'Reserva no encontrada' : 'No se encontraron reservas para este cliente');
+      console.error('Error en búsqueda:', err);
+      setError(searchType === 'id'
+        ? 'No se encontró la reserva con ese ID'
+        : 'No se encontraron reservas para este cliente');
       onSearchResults([]);
     } finally {
       setIsSearching(false);
@@ -72,15 +78,24 @@ const ReservaSearch = ({ onSearchResults }) => {
             <input
               type="number"
               value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === '' || /^[0-9]*$/.test(value)) {
+                  setSearchValue(value);
+                }
+              }}
               placeholder={searchType === 'id' ? 'Ingrese ID de reserva' : 'Ingrese ID de cliente'}
               min="1"
             />
-            <button type="submit" disabled={isSearching || !searchValue.trim()}>
+            <button
+              type="submit"
+              disabled={isSearching || !searchValue.trim()}
+              className="search-button"
+            >
               {isSearching ? 'Buscando...' : 'Buscar'}
             </button>
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={handleReset}
               className="reset-button"
             >

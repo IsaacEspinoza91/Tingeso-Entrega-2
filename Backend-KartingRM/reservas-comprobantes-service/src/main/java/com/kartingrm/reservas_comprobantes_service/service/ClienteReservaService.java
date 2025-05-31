@@ -3,6 +3,7 @@ package com.kartingrm.reservas_comprobantes_service.service;
 import com.kartingrm.reservas_comprobantes_service.entity.ClienteReserva;
 import com.kartingrm.reservas_comprobantes_service.entity.ClienteReservaId;
 import com.kartingrm.reservas_comprobantes_service.entity.Reserva;
+import com.kartingrm.reservas_comprobantes_service.model.ClienteDTO;
 import com.kartingrm.reservas_comprobantes_service.model.ClienteReservaRequest;
 import com.kartingrm.reservas_comprobantes_service.repository.ClienteReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +27,21 @@ public class ClienteReservaService {
 
     public List<ClienteReserva> obtenerIntegrantesByIdReserva(Long idReserva) {
         return clienteReservaRepository.findByIdReserva(idReserva);
+    }
+
+    public List<ClienteDTO> obtenerIntegrantesDTOByIdReserva(Long idReserva) {
+        List<ClienteReserva> idsClientesDeReserva = clienteReservaRepository.findByIdReserva(idReserva);
+        List<ClienteDTO> clientes = new ArrayList<>();
+
+        for(ClienteReserva idCliente : idsClientesDeReserva) {
+
+            // Obtener Cliente
+            ClienteDTO cliente = restTemplate.getForObject("http://cliente-desc-frecu-service/api/cliente-service/cliente/"
+                    + idCliente.getIdCliente(), ClienteDTO.class);
+
+            clientes.add(cliente);
+        }
+        return clientes;
     }
 
     public boolean agregarIntegrante(Long idCliente, Long idReserva) {

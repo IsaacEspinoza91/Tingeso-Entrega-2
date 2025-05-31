@@ -1,6 +1,6 @@
 import httpClient from '../http-common';
 
-const URL_LOCAL = '/api/reportes-service/';
+const URL_LOCAL = '/api/reportes-service';
 
 // Peticion Get para obtener los reportes de ingresos segun planes
 export const getReporteIngresosPorVueltas = async (params) => {

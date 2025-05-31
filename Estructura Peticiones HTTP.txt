@@ -206,6 +206,33 @@ Resultado:	(Los 3 métodos anteriores obtienen la estructura básica de la reser
 
 - GET, todas las reservas DTO: http://localhost:8080/api/reservas-comprobantes-service/reservas/DTO/
 - GET, reserva DTO según id: http://localhost:8080/api/reservas-comprobantes-service/reservas/DTO/3
+Resultado ejemplo:
+{
+    "id": 3,
+    "fecha": "2025-05-22",
+    "horaInicio": "12:10:00",
+    "horaFin": "12:50:00",
+    "estado": "confirmada",
+    "totalPersonas": 5,
+    "plan": {
+        "id": 1,
+        "descripcion": "10 vueltas o máx 10 min",
+        "duracionTotal": 30,
+        "precioRegular": 15000.0,
+        "precioFinSemana": 14000.0,
+        "precioFeriado": 13000.0
+    },
+    "reservante": {
+        "id": 8,
+        "rut": "20202202-2",
+        "nombre": "Ismael",
+        "apellido": "Arroyo",
+        "correo": "isma@usach.cl",
+        "telefono": "+56998177665",
+        "fechaNacimiento": "2008-05-01",
+        "activo": true
+    }
+}
 - GET, reservas DTO de un cliente según id: http://localhost:8080/api/reservas-comprobantes-service/reservas/DTO/reservante/4
 
 
@@ -234,11 +261,68 @@ Resultado:	(Los 3 métodos anteriores obtienen la estructura básica de la reser
 - DELETE, eliminar reserva no elimina comprobante: http://localhost:8080/api/reservas-comprobantes-service/reservas/{id}
 
 
+
 	--- Cliente_Reserva --- CRUD
+- GET, obtiene todos los clientes de una reserva según id reserva: http://localhost:8080/api/reservas-comprobantes-service/cliente-reserva/ClienteDTO/reserva/2
+Resultado:
+[
+    {
+        "id": 11,
+        "rut": "12432432-2",
+        "nombre": "Camila",
+        "apellido": "Pizarro",
+        "correo": "nombre1@usach.cl",
+        "telefono": "+56928177665",
+        "fechaNacimiento": "2013-05-24",
+        "activo": true
+    },
+    {
+        "id": 12,
+        "rut": "2",
+        "nombre": "nombre2",
+        "apellido": "apellido2",
+        "correo": "nombre2@usach.cl",
+        "telefono": "+56928177665",
+        "fechaNacimiento": "2003-05-24",
+        "activo": true
+    },
+    {
+        "id": 13,
+        "rut": "3",
+        "nombre": "nombre3",
+        "apellido": "apellido3",
+        "correo": "nombre3@usach.cl",
+        "telefono": "+56928177665",
+        "fechaNacimiento": "2003-05-01",
+        "activo": true
+    },
+    {
+        "id": 14,
+        "rut": "4543",
+        "nombre": "nombre4",
+        "apellido": "apellido4",
+        "correo": "nombre4@usach.cl",
+        "telefono": "+56928177665",
+        "fechaNacimiento": "2004-05-12",
+        "activo": true
+    },
+    {
+        "id": 15,
+        "rut": "5534234-3",
+        "nombre": "Gonzalo",
+        "apellido": "Fierro",
+        "correo": "jovenpistolero@gmail.com",
+        "telefono": "+56928177662",
+        "fechaNacimiento": "1994-06-09",
+        "activo": true
+    }
+]
+
 - GET, Obtener registros segun id reserva: http://localhost:8080/api/reservas-comprobantes-service/cliente-reserva/reserva/2
 - POST, agregar cliente a reserva (considera limite reserva): http://localhost:8080/api/reservas-comprobantes-service/cliente-reserva/agregar/cliente/1/reserva/2
 - DELETE, quitar cliente de reserva: http://localhost:8080/api/reservas-comprobantes-service/cliente-reserva/quitar/cliente/1/reserva/2
 (Estas funciones crean registros en cliente_reserva de MC3. Relación unidireccional)
+
 
 
 

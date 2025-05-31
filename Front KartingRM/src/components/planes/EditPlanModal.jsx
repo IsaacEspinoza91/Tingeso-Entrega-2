@@ -30,15 +30,15 @@ const EditPlanModal = ({ plan, onClose, onUpdate }) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: name.includes('precio') || name === 'duracionTotal' 
-        ? Number(value) 
+      [name]: name.includes('precio') || name === 'duracionTotal'
+        ? Number(value)
         : value
     });
   };
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.descripcion.trim()) newErrors.descripcion = 'Descripción es requerida';
     if (formData.duracionTotal <= 0) newErrors.duracionTotal = 'Duración debe ser mayor a 0';
     if (formData.precioRegular <= 0) newErrors.precioRegular = 'Precio debe ser mayor a 0';
@@ -51,12 +51,12 @@ const EditPlanModal = ({ plan, onClose, onUpdate }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setIsSubmitting(true);
     try {
-      const updatedPlan = await updatePlan(plan.idPlan, formData);
+      const updatedPlan = await updatePlan(plan.id, formData);
       onUpdate(updatedPlan);
       onClose();
     } catch (error) {
@@ -76,7 +76,7 @@ const EditPlanModal = ({ plan, onClose, onUpdate }) => {
           <h3>Editar Plan</h3>
           <button onClick={onClose} className="close-button">&times;</button>
         </div>
-        
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Descripción:</label>

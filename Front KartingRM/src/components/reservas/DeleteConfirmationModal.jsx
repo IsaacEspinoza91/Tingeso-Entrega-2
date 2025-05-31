@@ -11,18 +11,18 @@ const DeleteConfirmationModal = ({ item, itemType = 'reserva', onClose, onConfir
           <h3>Confirmar Eliminación</h3>
           <button onClick={onClose} className="close-button">&times;</button>
         </div>
-        
+
         <div className="confirmation-message">
-          ¿Estás seguro que deseas eliminar la {itemType} con {item.modelo || `ID ${item.idReserva}`}?
+          ¿Estás seguro que deseas eliminar la {itemType} con {item.modelo || `ID ${item.id}`}?
         </div>
 
         <div className="modal-actions">
           <button type="button" onClick={onClose} className="cancel-button">
             Cancelar
           </button>
-          <button 
-            type="button" 
-            onClick={() => onConfirm(item.idReserva)}
+          <button
+            type="button"
+            onClick={() => onConfirm(item.id)}
             className="delete-button"
           >
             Eliminar
