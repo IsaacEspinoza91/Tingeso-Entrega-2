@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import EditDetalleModal from './EditDetalleModal';
 import './ComprobanteDetails.css';
 
 const ComprobanteDetails = ({ comprobante }) => {
     const [detalles, setDetalles] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [editingDetalle, setEditingDetalle] = useState(null);
 
     useEffect(() => {
         if (comprobante && comprobante.detalles) {
@@ -29,14 +27,6 @@ const ComprobanteDetails = ({ comprobante }) => {
         <div className="comprobante-details">
             <h3>Detalles del Comprobante #{comprobante.id}</h3>
 
-            {editingDetalle && (
-                <EditDetalleModal
-                    detalle={editingDetalle}
-                    onClose={() => setEditingDetalle(null)}
-                    onUpdate={handleUpdateDetalle}
-                />
-            )}
-
             <div className="table-responsive">
                 <table className="detalles-table">
                     <thead>
@@ -51,7 +41,6 @@ const ComprobanteDetails = ({ comprobante }) => {
                             <th>Monto Final</th>
                             <th>IVA</th>
                             <th>Total</th>
-                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,14 +67,6 @@ const ComprobanteDetails = ({ comprobante }) => {
                                     <td>${detalle.montoFinal.toLocaleString()}</td>
                                     <td>${detalle.montoIva.toLocaleString()}</td>
                                     <td>${detalle.montoTotal.toLocaleString()}</td>
-                                    <td className="actions-cell">
-                                        <button
-                                            onClick={() => setEditingDetalle(detalle)}
-                                            className="edit-button"
-                                        >
-                                            Editar
-                                        </button>
-                                    </td>
                                 </tr>
                             ))
                         ) : (

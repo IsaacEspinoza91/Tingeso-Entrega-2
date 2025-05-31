@@ -4,6 +4,7 @@ import ComprobanteDetails from './ComprobanteDetails';
 import PDFDownloadButton from './ComprobantePDF/PDFDownloadButton';
 import CreateComprobanteModal from './CreateComprobanteModal';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
+import EditComprobanteModal from './EditComprobanteModal';
 import './ComprobanteSearch.css';
 
 const ComprobanteSearch = () => {
@@ -15,6 +16,7 @@ const ComprobanteSearch = () => {
     const [comprobante, setComprobante] = useState(null);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -81,6 +83,12 @@ const ComprobanteSearch = () => {
         // Proximamente implementare enviar correo con comprobante
         alert("Función de envío de comprobante no implementada aún");
     };
+
+    const handleUpdateComprobante = (updatedComprobante) => {
+        setComprobante(updatedComprobante);
+        setShowEditModal(false);
+    };
+
 
     return (
         <div className="comprobante-search-container">
@@ -169,6 +177,12 @@ const ComprobanteSearch = () => {
                                 Enviar Comprobante
                             </button>
                             <button
+                                onClick={() => setShowEditModal(true)}
+                                className="edit-button"
+                            >
+                                Editar
+                            </button>
+                            <button
                                 onClick={() => setShowDeleteModal(true)}
                                 className="delete-button"
                             >
@@ -225,6 +239,15 @@ const ComprobanteSearch = () => {
                     onComprobanteCreated={handleComprobanteCreated}
                 />
             )}
+
+            {showEditModal && (
+                <EditComprobanteModal
+                    comprobante={comprobante}
+                    onClose={() => setShowEditModal(false)}
+                    onUpdate={handleUpdateComprobante}
+                />
+            )}
+
         </div>
     );
 };
