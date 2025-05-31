@@ -1,7 +1,6 @@
 import httpClient from '../http-common';
 
 const URL_LOCAL = '/api/plan/planes';
-//const URL_LOCAL = '/planes';
 
 // Peticion GET de todos los planes
 export const getPlanes = async () => {

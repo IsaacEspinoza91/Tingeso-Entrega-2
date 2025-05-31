@@ -50,80 +50,41 @@
 }
 
 .form-group {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
-}
-
-.checkbox-custom {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #007bff;
-    border-radius: 4px;
-    margin-right: 10px;
-    position: relative;
-}
-
-.checkbox-text {
-    font-size: 16px;
-    color: #333;
-}
-
-input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-}
-
-input[type="checkbox"]:checked+.checkbox-custom {
-    background-color: #007bff;
-}
-
-input[type="checkbox"]:checked+.checkbox-custom::after {
-    content: '';
-    position: absolute;
-    left: 6px;
-    top: 2px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-}
-
-.comprobante-summary {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
-    margin-bottom: 25px;
-    padding: 15px;
-    background-color: #f8f9fa;
-    border-radius: 6px;
-}
-
-.summary-item {
-    display: flex;
-    flex-direction: column;
-}
-
-.summary-label {
-    font-weight: bold;
-    margin-bottom: 5px;
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
     color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-group input:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.error {
+    color: #dc3545;
     font-size: 14px;
+    margin-top: 5px;
+    display: block;
 }
 
 .error-message {
-    color: #dc3545;
-    padding: 10px;
+    color: #721c24;
     background-color: #f8d7da;
     border: 1px solid #f5c6cb;
+    padding: 10px;
     border-radius: 4px;
     margin-bottom: 20px;
 }
@@ -132,14 +93,16 @@ input[type="checkbox"]:checked+.checkbox-custom::after {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
+    margin-top: 20px;
 }
 
 .cancel-button,
-.save-button {
-    padding: 8px 16px;
+.submit-button {
+    padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
-    font-weight: 500;
+    font-size: 16px;
+    transition: all 0.2s;
 }
 
 .cancel-button {
@@ -158,17 +121,17 @@ input[type="checkbox"]:checked+.checkbox-custom::after {
     cursor: not-allowed;
 }
 
-.save-button {
+.submit-button {
     background-color: #28a745;
-    border: 1px solid #218838;
     color: white;
+    border: none;
 }
 
-.save-button:hover {
+.submit-button:hover {
     background-color: #218838;
 }
 
-.save-button:disabled {
+.submit-button:disabled {
     background-color: #94d3a2;
     cursor: not-allowed;
 }

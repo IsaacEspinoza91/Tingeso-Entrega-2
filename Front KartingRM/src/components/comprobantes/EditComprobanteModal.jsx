@@ -3,108 +3,110 @@ import { updateComprobante } from '../../services/comprobanteService';
 import './EditComprobanteModal.css';
 
 const EditComprobanteModal = ({ comprobante, onClose, onUpdate }) => {
-  const [formData, setFormData] = useState({
-    pagado: false,
-    total: 0
-  });
+    const [pagado, setPagado] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState('');
 
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+    useEffect(() => {
+        if (comprobante) {
+            setPagado(comprobante.pagado || false);
+        }
+    }, [comprobante]);
 
-  useEffect(() => {
-    if (comprobante) {
-      setFormData({
-        pagado: comprobante.pagado || false,
-        total: comprobante.total || 0
-      });
-    }
-  }, [comprobante]);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : Number(value)
-    });
-  };
+        setIsSubmitting(true);
+        setError('');
 
-  const validateForm = () => {
-    const newErrors = {};
-    
-    if (formData.total < 0) newErrors.total = 'Total debe ser mayor o igual a 0';
+        try {
+            // El servicio ahora solo actualiza el estado de pago
+            const updatedComprobante = await updateComprobante(comprobante.id, pagado);
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+            // Construir objeto actualizado con todos los datos necesarios
+            const fullUpdatedComprobante = {
+                ...comprobante,
+                pagado: updatedComprobante.pagado
+            };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
+            onUpdate(fullUpdatedComprobante);
+            onClose();
+        } catch (err) {
+            console.error('Error al actualizar comprobante:', err);
+            setError(err.response?.data?.message || 'Error al actualizar comprobante');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
-    setIsSubmitting(true);
-    try {
-      const updatedComprobante = await updateComprobante(comprobante.idComprobante, formData);
-      onUpdate(updatedComprobante);
-      onClose();
-    } catch (error) {
-      console.error('Error al actualizar comprobante:', error);
-      setErrors({ submit: 'Error al actualizar comprobante. Por favor intente nuevamente.' });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    if (!comprobante) return null;
 
-  if (!comprobante) return null;
+    return (
+        <div className="modal-overlay">
+            <div className="modal-content">
+                <div className="modal-header">
+                    <h3>Editar Estado de Pago - Comprobante #{comprobante.id}</h3>
+                    <button
+                        onClick={onClose}
+                        className="close-button"
+                        disabled={isSubmitting}
+                    >
+                        &times;
+                    </button>
+                </div>
 
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h3>Editar Comprobante #{comprobante.idComprobante}</h3>
-          <button onClick={onClose} className="close-button">&times;</button>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label className="checkbox-label">
+                            <input
+                                type="checkbox"
+                                checked={pagado}
+                                onChange={(e) => setPagado(e.target.checked)}
+                                disabled={isSubmitting}
+                            />
+                            <span className="checkbox-custom"></span>
+                            <span className="checkbox-text">Marcar como pagado</span>
+                        </label>
+                    </div>
+
+                    {error && <div className="error-message">{error}</div>}
+
+                    <div className="comprobante-summary">
+                        <div className="summary-item">
+                            <span className="summary-label">Total:</span>
+                            <span>${comprobante.total.toLocaleString()}</span>
+                        </div>
+                        <div className="summary-item">
+                            <span className="summary-label">Reserva ID:</span>
+                            <span>{comprobante.reserva.id}</span>
+                        </div>
+                        <div className="summary-item">
+                            <span className="summary-label">Fecha:</span>
+                            <span>{new Date(comprobante.reserva.fecha + "T00:00:00").toLocaleDateString()}</span>
+                        </div>
+                    </div>
+
+                    <div className="modal-actions">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="cancel-button"
+                            disabled={isSubmitting}
+                        >
+                            Cancelar
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="save-button"
+                        >
+                            {isSubmitting ? 'Guardando...' : 'Guardar Cambios'}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-        
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>
-              <input
-                type="checkbox"
-                name="pagado"
-                checked={formData.pagado}
-                onChange={handleChange}
-              />
-              Pagado
-            </label>
-          </div>
-
-          <div className="form-group">
-            <label>Total:</label>
-            <input
-              type="number"
-              name="total"
-              value={formData.total}
-              onChange={handleChange}
-              min="0"
-              step="0.01"
-            />
-            {errors.total && <span className="error">{errors.total}</span>}
-          </div>
-
-          {errors.submit && <div className="error-message">{errors.submit}</div>}
-
-          <div className="modal-actions">
-            <button type="button" onClick={onClose} className="cancel-button">
-              Cancelar
-            </button>
-            <button type="submit" disabled={isSubmitting} className="save-button">
-              {isSubmitting ? 'Guardando...' : 'Guardar Cambios'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default EditComprobanteModal;

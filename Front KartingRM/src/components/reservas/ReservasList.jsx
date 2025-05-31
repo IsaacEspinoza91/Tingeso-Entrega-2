@@ -105,7 +105,7 @@ const ReservasList = () => {
           onClick={() => setShowCreateForm(!showCreateForm)}
           className="create-button"
         >
-          {showCreateForm ? 'Cancelar' : 'CREAR RESERVA'}
+          {showCreateForm ? 'Cancelar' : 'Crear Nueva Reserva'}
         </button>
       </div>
 
