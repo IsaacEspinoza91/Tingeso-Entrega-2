@@ -18,6 +18,7 @@
 .header-actions {
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
 .create-button {
@@ -34,6 +35,24 @@
 .create-button:hover {
     background-color: #218838;
 }
+
+.send-button {
+    padding: 8px 16px;
+    background-color: #6f42c1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    min-width: 150px;
+    text-align: center;
+}
+
+.send-button:hover {
+    background-color: #5a32a3;
+}
+
 
 .search-section {
     margin-bottom: 30px;
@@ -187,4 +206,41 @@
 .table-responsive {
     width: 100%;
     overflow-x: auto;
+}
+
+.comprobante-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.header-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.delete-button {
+    padding: 8px 16px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    min-width: 150px;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+.delete-button:disabled {
+    background-color: #e4606d;
+    cursor: not-allowed;
+    opacity: 0.7;
 }

@@ -2,18 +2,6 @@ import httpClient from '../http-common';
 
 const URL_LOCAL = '/api/reservas-comprobantes-service';
 
-// Peticion GET para obtener todos los comprobantes
-/*
-export const getComprobantes = async () => {
-  try {
-    const response = await httpClient.get(`${URL_LOCAL}/`);
-    return response.data;
-  } catch (error) {
-    console.error('Error al obtener comprobantes:', error);
-    throw error;
-  }
-};*/
-
 // Peticion Get para obtener comprobante segun id
 export const getComprobanteById = async (idComprobante) => {
   try {
@@ -25,7 +13,18 @@ export const getComprobanteById = async (idComprobante) => {
   }
 };
 
-// Peticion Post para crear comprobante segun id de reserva, booleano de dia feriado y descuento extra
+// Peticion Get para obtener comprobante segun id reserva
+export const getComprobanteByIdReserva = async (idReserva) => {
+  try {
+    const response = await httpClient.get(`${URL_LOCAL}/comprobantes/reserva/${idReserva}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al obtener comprobante con reseva ID ${idReserva}:`, error);
+    throw error;
+  }
+};
+
+// Peticion Post para crear comprobante segun id de reserva y descuento extra
 export const createComprobante = async (idReserva, descuentoExtra) => {
   try {
     const response = await httpClient.post(

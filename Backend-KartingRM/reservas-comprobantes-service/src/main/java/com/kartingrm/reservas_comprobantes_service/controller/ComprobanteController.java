@@ -21,6 +21,13 @@ public class ComprobanteController {
         return ResponseEntity.ok(comprobante);
     }
 
+    // GET comprobante segun id reserva
+    @GetMapping("/reserva/{idReserva}")
+    public ResponseEntity<ComprobanteConDetallesDTO> getComprobanteByIdReserva(@PathVariable("idReserva") Long idReserva) {
+        ComprobanteConDetallesDTO comprobante = comprobanteService.getComprobanteConDetallesByIdReserva(idReserva);
+        return ResponseEntity.ok(comprobante);
+    }
+
     // CREATE comprobante con todos sus detalles
     // Deben estar previamente los integrantes asociados a la reserva (tabla cliente_reserva)
     @PostMapping("/reserva/{reservaId}/descuento-extra/{descuentoExtra}")

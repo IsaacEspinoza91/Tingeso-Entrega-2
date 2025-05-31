@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
-import { getComprobanteById, createComprobante } from '../../services/comprobanteService';
+import { getComprobanteById, getComprobanteByIdReserva, deleteComprobante } from '../../services/comprobanteService';
 import ComprobanteDetails from './ComprobanteDetails';
 import PDFDownloadButton from './ComprobantePDF/PDFDownloadButton';
 import CreateComprobanteModal from './CreateComprobanteModal';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 import './ComprobanteSearch.css';
 
 const ComprobanteSearch = () => {
     const [searchValue, setSearchValue] = useState('');
-    const [searchType, setSearchType] = useState('id'); // 'id' o 'reserva'
+    const [searchType, setSearchType] = useState('reserva'); // 'id' o 'reserva'
     const [isSearching, setIsSearching] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const [error, setError] = useState('');
     const [comprobante, setComprobante] = useState(null);
     const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -31,12 +34,16 @@ const ComprobanteSearch = () => {
                 const result = await getComprobanteById(searchValue);
                 setComprobante(result);
             } else {
-                // Aquí iría la lógica para búsqueda por ID de reserva
-                // Por ahora mostramos un mensaje
-                setError('Búsqueda por reserva no implementada aún');
+                // lógica para búsqueda por ID de reserva
+                const result = await getComprobanteByIdReserva(searchValue);
+                setComprobante(result);
             }
         } catch (err) {
-            setError('No se encontró un comprobante con ese ID');
+            if (searchType === 'id') {
+                setError('No se encontró un comprobante con la ID ');
+            } else {
+                setError('No se encontró un comprobante con la ID de reserva ');
+            }
             console.error('Error al buscar comprobante:', err);
         } finally {
             setIsSearching(false);
@@ -53,6 +60,26 @@ const ComprobanteSearch = () => {
         setComprobante(newComprobante);
         setShowCreateModal(false);
         setSearchValue(newComprobante.id.toString());
+    };
+
+    const handleDelete = async () => {
+        setIsDeleting(true);
+        try {
+            await deleteComprobante(comprobante.id);
+            setComprobante(null);
+            setSearchValue('');
+        } catch (err) {
+            setError('Error al eliminar el comprobante');
+            console.error('Error al eliminar comprobante:', err);
+        } finally {
+            setIsDeleting(false);
+            setShowDeleteModal(false);
+        }
+    };
+
+    const handleSendComprobante = () => {
+        // Proximamente implementare enviar correo con comprobante
+        alert("Función de envío de comprobante no implementada aún");
     };
 
     return (
@@ -133,8 +160,20 @@ const ComprobanteSearch = () => {
                 <div className="comprobante-result">
                     <div className="comprobante-header">
                         <h4>Comprobante #{comprobante.id}</h4>
-                        <div>
+                        <div className="header-actions">
                             <PDFDownloadButton comprobante={comprobante} />
+                            <button
+                                onClick={handleSendComprobante}
+                                className="send-button"
+                            >
+                                Enviar Comprobante
+                            </button>
+                            <button
+                                onClick={() => setShowDeleteModal(true)}
+                                className="delete-button"
+                            >
+                                Eliminar Comprobante
+                            </button>
                         </div>
                     </div>
 
@@ -161,6 +200,23 @@ const ComprobanteSearch = () => {
 
                     <ComprobanteDetails comprobante={comprobante} />
                 </div>
+            )}
+
+            {showCreateModal && (
+                <CreateComprobanteModal
+                    onClose={() => setShowCreateModal(false)}
+                    onComprobanteCreated={handleComprobanteCreated}
+                />
+            )}
+
+            {showDeleteModal && (
+                <DeleteConfirmationModal
+                    item={comprobante}
+                    itemType="comprobante"
+                    onClose={() => setShowDeleteModal(false)}
+                    onConfirm={handleDelete}
+                    isDeleting={isDeleting}
+                />
             )}
 
             {showCreateModal && (

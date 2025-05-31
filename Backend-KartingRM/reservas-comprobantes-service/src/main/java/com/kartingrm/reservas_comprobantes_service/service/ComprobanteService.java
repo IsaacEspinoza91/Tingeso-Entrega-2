@@ -83,11 +83,65 @@ public class ComprobanteService {
     }
 
 
+    // GET
+    // Obtener comprobante con detalles segun id reserva
+    public ComprobanteConDetallesDTO getComprobanteConDetallesByIdReserva(Long idReserva) {
+        // Obtener comprobante
+        Comprobante comprobante = comprobanteRepository.findByIdReserva(idReserva)
+                .orElseThrow(() -> new EntityNotFoundException("Comprobante no encontrado"));
+
+        // Obtener los detalles del comprobante
+        List<DetalleComprobante> detallesOriginales = detalleComprobanteRepository
+                .findDetalleComprobantesByIdComprobante(comprobante.getId());
+
+        List<DetalleComprobanteConClienteDTO> detalles = new ArrayList<>();
+        for (DetalleComprobante detalleActual : detallesOriginales) {
+            ClienteDTO integranteObjeto = restTemplate.getForObject(
+                    "http://cliente-desc-frecu-service/api/cliente-service/cliente/" + detalleActual.getIdCliente(),
+                    ClienteDTO.class);
+            detalles.add(new DetalleComprobanteConClienteDTO(detalleActual,integranteObjeto));
+        }
+
+        // Obtener reserva segun la id
+        Reserva reserva = reservaService.getReservaById(idReserva);
+
+        // Crear objeto Reserva DTO
+        ReservaDTO reservaDTO = new ReservaDTO();
+        reservaDTO.setId(reserva.getId());
+        reservaDTO.setFecha(reserva.getFecha());
+        reservaDTO.setHoraInicio(reserva.getHoraInicio());
+        reservaDTO.setHoraFin(reserva.getHoraFin());
+        reservaDTO.setEstado(reserva.getEstado());
+        reservaDTO.setTotalPersonas(reserva.getTotalPersonas());
+        // Obtener objetos cliente y plan mediante peticion http
+        ClienteDTO cliente = restTemplate.getForObject("http://cliente-desc-frecu-service/api/cliente-service/cliente/" + reserva.getIdReservante(), ClienteDTO.class);
+        PlanDTO plan = restTemplate.getForObject("http://plan-service/api/plan/planes/" + reserva.getIdPlan(), PlanDTO.class);
+        reservaDTO.setPlan(plan);
+        reservaDTO.setReservante(cliente);
+
+
+
+        // Crear objeto combinado de comprobante y detalles
+        ComprobanteConDetallesDTO comprobanteConDetalles = new ComprobanteConDetallesDTO();
+        comprobanteConDetalles.setId(comprobante.getId());
+        comprobanteConDetalles.setTotal(comprobante.getTotal());
+        comprobanteConDetalles.setPagado(comprobante.isPagado());
+        comprobanteConDetalles.setReserva(reservaDTO);
+        comprobanteConDetalles.setDetalles(detalles);
+
+        return comprobanteConDetalles;
+    }
+
 
     // Create
 
     // Crear comprobante completo con generacion automatica de detalles por cliente
     public ComprobanteConDetallesDTO createComprobante(Long reservaId, double descuentoExtra) {
+        // Condicion no crear en caso de que ya exista comprobante con asociado a la reserva
+        if (!comprobanteRepository.findByIdReserva(reservaId).isEmpty()) {
+            throw new RuntimeException("Ya existe un comprobante asociado a esta reserva");
+        }
+
         // Condicion base si el descuento es negativo
         if (descuentoExtra < 0) throw new IllegalArgumentException();
 

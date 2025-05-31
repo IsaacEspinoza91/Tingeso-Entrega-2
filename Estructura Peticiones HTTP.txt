@@ -330,6 +330,9 @@ Resultado:
 - GET, obtener comprobante según id: http://localhost:8080/api/reservas-comprobantes-service/comprobantes/6
 resultado: mismo DTO de post
 
+- GET, obtener comprobante según id reserva: http://localhost:8080/api/reservas-comprobantes-service/comprobantes/reserva/6
+resultado: mismo DTO de post
+
 - PUT, actualizar estado pagado (bool) de comprobante: http://localhost:8080/api/reservas-comprobantes-service/comprobantes/{id_comprobante}/estado/false
  
 - POST, crear comprobante con detalles: http://localhost:8080/api/reservas-comprobantes-service/comprobantes/reserva/{id_comprobante}/descuento-extra/{desc_extra}
