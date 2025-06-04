@@ -19,7 +19,7 @@ export const getComprobanteByIdReserva = async (idReserva) => {
     const response = await httpClient.get(`${URL_LOCAL}/comprobantes/reserva/${idReserva}`);
     return response.data;
   } catch (error) {
-    console.error(`Error al obtener comprobante con reseva ID ${idReserva}:`, error);
+    console.error(error.message);
     throw error;
   }
 };
@@ -32,7 +32,7 @@ export const createComprobante = async (idReserva, descuentoExtra) => {
     );
     return response.data;
   } catch (error) {
-    console.error('Error al crear comprobante:', error);
+    console.error(error.message);
     throw error;
   }
 };

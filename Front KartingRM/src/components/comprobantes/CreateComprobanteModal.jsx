@@ -51,10 +51,10 @@ const CreateComprobanteModal = ({ onClose, onComprobanteCreated }) => {
             );
 
             onComprobanteCreated(response);
+            setErrorMessage('');
             onClose();
-        } catch (error) {
-            console.error('Error al crear comprobante:', error);
-            setErrorMessage(error.response?.data?.message || 'Error al crear comprobante. Verifique el ID de reserva.');
+        } catch (err) {
+            setErrorMessage(err.response.data);
         } finally {
             setIsSubmitting(false);
         }

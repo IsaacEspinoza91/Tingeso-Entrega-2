@@ -61,14 +61,14 @@ public class ReservaService {
 
     public Reserva getReservaById(Long id) {
         Optional<Reserva> reserva = reservaRepository.findById(id);
-        if (reserva.isEmpty()) throw new EntityNotFoundException("Reserva " + id + " no encontrada");
+        if (reserva.isEmpty()) throw new EntityNotFoundException("Reserva de ID " + id + " no encontrada");
 
         return reserva.get();
     }
 
     public ReservaDTO getReservaDTOById(Long id) {
         Optional<Reserva> reserva = reservaRepository.findById(id);
-        if (reserva.isEmpty()) throw new EntityNotFoundException("Reserva " + id + " no encontrada");
+        if (reserva.isEmpty()) throw new EntityNotFoundException("Reserva de ID " + id + " no encontrada");
 
         // Obtener Cliente
         ClienteDTO cliente = restTemplate.getForObject("http://cliente-desc-frecu-service/api/cliente-service/cliente/" + reserva.get().getIdReservante(), ClienteDTO.class);

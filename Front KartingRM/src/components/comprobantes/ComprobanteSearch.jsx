@@ -41,10 +41,14 @@ const ComprobanteSearch = () => {
                 setComprobante(result);
             }
         } catch (err) {
-            if (searchType === 'id') {
-                setError('No se encontró un comprobante con la ID ');
+            if (err.response && err.response.status === 404) {
+                setError(err.response.data);
             } else {
-                setError('No se encontró un comprobante con la ID de reserva ');
+                if (searchType === 'id') {
+                    setError('No se encontró un comprobante con la ID ');
+                } else {
+                    setError('No se encontró un comprobante con la ID de reserva ');
+                }
             }
             console.error('Error al buscar comprobante:', err);
         } finally {

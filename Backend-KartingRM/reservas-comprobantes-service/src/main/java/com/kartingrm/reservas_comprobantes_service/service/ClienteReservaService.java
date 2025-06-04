@@ -89,7 +89,6 @@ public class ClienteReservaService {
             throw new IllegalArgumentException("El cliente no esta relacionado a esta reserva");
         }
 
-        //String url = "http://cliente-desc-frecu-service/api/cliente-service/cliente-reserva/reserva/{idReserva}/cliente/{idCliente}";
         // Eliminamos la relacion de la tabla Cliente_reserva de MC3   reserva/1/cliente/2
         restTemplate.delete("http://cliente-desc-frecu-service/api/cliente-service/cliente-reserva/reserva/{idReserva}/cliente/{idCliente}", idReserva, idCliente);
 

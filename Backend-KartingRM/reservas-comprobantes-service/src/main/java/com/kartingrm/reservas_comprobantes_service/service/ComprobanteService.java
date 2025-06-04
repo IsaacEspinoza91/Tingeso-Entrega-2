@@ -40,7 +40,7 @@ public class ComprobanteService {
     public ComprobanteConDetallesDTO getComprobanteConDetallesById(Long idComprobante) {
         // Obtener comprobante
         Comprobante comprobante = comprobanteRepository.findById(idComprobante)
-                .orElseThrow(() -> new EntityNotFoundException("Comprobante no encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Comprobante de ID " + idComprobante + " no encontrado"));
 
         // Obtener los detalles del comprobante
         List<DetalleComprobante> detallesOriginales = detalleComprobanteRepository.findDetalleComprobantesByIdComprobante(idComprobante);
@@ -53,6 +53,7 @@ public class ComprobanteService {
         }
 
         // Obtener reserva segun la id
+        // En caso de NotFound Reserva, se lanza mensaje en la peticion
         Reserva reserva = reservaService.getReservaById(comprobante.getIdReserva());
 
         // Crear objeto Reserva DTO
@@ -88,7 +89,7 @@ public class ComprobanteService {
     public ComprobanteConDetallesDTO getComprobanteConDetallesByIdReserva(Long idReserva) {
         // Obtener comprobante
         Comprobante comprobante = comprobanteRepository.findByIdReserva(idReserva)
-                .orElseThrow(() -> new EntityNotFoundException("Comprobante no encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Comprobante no encontrado segun la reserva ID: " + idReserva));
 
         // Obtener los detalles del comprobante
         List<DetalleComprobante> detallesOriginales = detalleComprobanteRepository
@@ -139,7 +140,7 @@ public class ComprobanteService {
     public ComprobanteConDetallesDTO createComprobante(Long reservaId, double descuentoExtra) {
         // Condicion no crear en caso de que ya exista comprobante con asociado a la reserva
         if (!comprobanteRepository.findByIdReserva(reservaId).isEmpty()) {
-            throw new RuntimeException("Ya existe un comprobante asociado a esta reserva");
+            throw new IllegalArgumentException("Ya existe un comprobante asociado a esta reserva");
         }
 
         // Condicion base si el descuento es negativo

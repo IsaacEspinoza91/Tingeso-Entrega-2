@@ -33,7 +33,7 @@ const EditComprobanteModal = ({ comprobante, onClose, onUpdate }) => {
             onClose();
         } catch (err) {
             console.error('Error al actualizar comprobante:', err);
-            setError(err.response?.data?.message || 'Error al actualizar comprobante');
+            setError(err.response.data);
         } finally {
             setIsSubmitting(false);
         }
