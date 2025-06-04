@@ -8,6 +8,7 @@ const menuItems = [
   { path: "/comprobantes", name: "Comprobantes" },
   { path: "/calendario", name: "Calendario" },
   { path: "/reportes", name: "Reportes" },
+  { path: "/configuraciones", name: "Configuraciones" },
 ]
 
 export default function Navbar() {

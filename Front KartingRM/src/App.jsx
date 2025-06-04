@@ -7,6 +7,7 @@ import Reservas from './pages/Reservas/Reservas'
 import Comprobantes from './pages/Comprobantes/Comprobantes'
 import Calendario from './pages/Calendario/Calendario'
 import Reportes from './pages/Reportes/Reportes'
+import Configuraciones from './pages/Configuraciones/SettingsMenu'
 import './App.css'
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/comprobantes" element={<Comprobantes />} />
           <Route path="/calendario" element={<Calendario />} />
           <Route path="/reportes" element={<Reportes />} />
+          <Route path="/configuraciones" element={<Configuraciones />} />
         </Routes>
       </main>
     </div>
