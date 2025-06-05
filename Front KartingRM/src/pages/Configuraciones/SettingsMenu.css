@@ -61,7 +61,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #f0f0f0;
+    background-color: #000000a3;
     border: none;
     font-size: 20px;
     cursor: pointer;
@@ -71,7 +71,7 @@
 }
 
 .back-button:hover {
-    background-color: #e0e0e0;
+    background-color: #e43f3f;
 }
 
 .config-content {
