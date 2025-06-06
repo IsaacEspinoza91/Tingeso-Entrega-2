@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { 
-  getClienteById, 
+import {
+  getClienteById,
   getClienteByRut,
-  getClientesByNombreApellido 
+  getClientesByNombreApellido
 } from '../../services/clienteService';
 import './ClienteSearch.css';
 
@@ -16,7 +16,7 @@ const ClienteSearch = ({ onSearchResults }) => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    
+
     if (searchType !== 'nombre' && !searchValue.trim()) {
       setError('Por favor ingrese un valor para buscar');
       return;
@@ -32,7 +32,7 @@ const ClienteSearch = ({ onSearchResults }) => {
 
     try {
       let result;
-      switch(searchType) {
+      switch (searchType) {
         case 'id':
           result = await getClienteById(searchValue);
           break;
@@ -45,11 +45,11 @@ const ClienteSearch = ({ onSearchResults }) => {
         default:
           throw new Error('Tipo de búsqueda no válido');
       }
-      
+
       onSearchResults(Array.isArray(result) ? result : [result]);
     } catch (err) {
-      setError(searchType === 'nombre' ? 
-        'No se encontraron clientes con ese nombre y apellido' : 
+      setError(searchType === 'nombre' ?
+        'No se encontraron clientes con ese nombre y apellido' :
         'Cliente no encontrado');
       onSearchResults([]);
     } finally {
@@ -107,13 +107,21 @@ const ClienteSearch = ({ onSearchResults }) => {
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 placeholder={
-                  searchType === 'id' ? 
-                  'Ingrese ID' : 
-                  'Ingrese RUT (ej: 12.345.678-9)'
+                  searchType === 'id' ?
+                    'Ingrese ID' :
+                    'Ingrese RUT (ej: 12.345.678-9)'
                 }
               />
               <button type="submit" disabled={isSearching || !searchValue.trim()}>
                 {isSearching ? 'Buscando...' : 'Buscar'}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleReset}
+                className="reset-button"
+              >
+                Mostrar Todos
               </button>
             </div>
           ) : (
@@ -130,8 +138,8 @@ const ClienteSearch = ({ onSearchResults }) => {
                 onChange={(e) => setApellido(e.target.value)}
                 placeholder="Apellido"
               />
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 disabled={isSearching || !nombre.trim() || !apellido.trim()}
               >
                 {isSearching ? 'Buscando...' : 'Buscar'}
@@ -139,13 +147,6 @@ const ClienteSearch = ({ onSearchResults }) => {
             </div>
           )}
 
-          <button 
-            type="button" 
-            onClick={handleReset}
-            className="reset-button"
-          >
-            Mostrar Todos
-          </button>
         </div>
       </form>
 

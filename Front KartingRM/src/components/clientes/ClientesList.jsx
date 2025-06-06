@@ -28,7 +28,6 @@ const ClientesList = () => {
   const fetchClientes = async () => {
     try {
       setLoading(true);
-      // Usamos la función adecuada según si queremos ver inactivos o no
       const data = showInactive ? await getClientes() : await getClientesActivos();
       setClientes(data);
       setLoading(false);
@@ -40,7 +39,7 @@ const ClientesList = () => {
 
   useEffect(() => {
     fetchClientes();
-  }, [showInactive]); // Se vuelve a ejecutar cuando cambia showInactive
+  }, [showInactive]);
 
   const handleClienteCreated = () => {
     fetchClientes();
@@ -83,12 +82,10 @@ const ClientesList = () => {
 
   const toggleClienteStatus = async (cliente) => {
     try {
-      // Mostrar un indicador de carga si es necesario
       const updatedCliente = cliente.activo
         ? await desactivarCliente(cliente.id)
         : await activarCliente(cliente.id);
 
-      // Actualizar el estado local
       setClientes(clientes.map(c =>
         c.id === cliente.id ? updatedCliente : c
       ));
@@ -99,18 +96,13 @@ const ClientesList = () => {
         ));
       }
 
-      // Mostrar notificación de éxito
-      // (podrías implementar un sistema de notificaciones)
       console.log(`Cliente ${updatedCliente.nombre} ${updatedCliente.apellido} ha sido ${updatedCliente.activo ? 'activado' : 'desactivado'}`);
     } catch (error) {
       console.error('Error al cambiar estado del cliente:', error);
-      // Mostrar notificación de error al usuario
-      // (podrías implementar un sistema de notificaciones)
       console.error('No se pudo cambiar el estado del cliente. Por favor intente nuevamente.');
     }
   };
 
-  // Mostramos los clientes según el filtro aplicado
   const displayedClientes = filteredClientes || clientes;
 
   if (loading) return <div className="loading">Cargando clientes...</div>;

@@ -9,6 +9,7 @@
   margin-top: 0;
   color: #333;
   margin-bottom: 15px;
+  text-align: left;
 }
 
 .search-controls {
@@ -21,6 +22,8 @@
   display: flex;
   gap: 15px;
   margin-bottom: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 .search-type label {
@@ -28,6 +31,7 @@
   align-items: center;
   gap: 5px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .search-input {
@@ -77,7 +81,6 @@
   font-size: 14px;
 }
 
-
 .name-search-inputs {
   display: flex;
   gap: 10px;
@@ -109,11 +112,4 @@
 .name-search-inputs button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
-}
-
-.search-type {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
 }
