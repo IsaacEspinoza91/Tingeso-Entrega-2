@@ -39,6 +39,7 @@
     padding: 10px 8px;
     border-bottom: 1px solid #dee2e6;
     vertical-align: top;
+    text-align: left;
 }
 
 .detalles-table tr:hover td {

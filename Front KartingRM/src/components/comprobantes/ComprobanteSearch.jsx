@@ -5,6 +5,7 @@ import PDFDownloadButton from './ComprobantePDF/PDFDownloadButton';
 import CreateComprobanteModal from './CreateComprobanteModal';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import EditComprobanteModal from './EditComprobanteModal';
+import EmailModal from './ComprobantePDF/EmailModal';
 import './ComprobanteSearch.css';
 
 const ComprobanteSearch = () => {
@@ -17,6 +18,7 @@ const ComprobanteSearch = () => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showEmailModal, setShowEmailModal] = useState(false);
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -31,12 +33,10 @@ const ComprobanteSearch = () => {
         setComprobante(null);
 
         try {
-            // Por ahora solo implementamos búsqueda por ID de comprobante
             if (searchType === 'id') {
                 const result = await getComprobanteById(searchValue);
                 setComprobante(result);
             } else {
-                // lógica para búsqueda por ID de reserva
                 const result = await getComprobanteByIdReserva(searchValue);
                 setComprobante(result);
             }
@@ -84,8 +84,7 @@ const ComprobanteSearch = () => {
     };
 
     const handleSendComprobante = () => {
-        // Proximamente implementare enviar correo con comprobante
-        alert("Función de envío de comprobante no implementada aún");
+        setShowEmailModal(true);
     };
 
     const handleUpdateComprobante = (updatedComprobante) => {
@@ -252,6 +251,12 @@ const ComprobanteSearch = () => {
                 />
             )}
 
+            {showEmailModal && (
+                <EmailModal
+                    comprobante={comprobante}
+                    onClose={() => setShowEmailModal(false)}
+                />
+            )}
         </div>
     );
 };
