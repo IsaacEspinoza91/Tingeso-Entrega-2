@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.kartingrm</groupId>
 	<artifactId>eureka-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1</version>
 	<name>eureka-service</name>
 	<description>Eureka Service para KartingRm Microservicios</description>
 	<properties>
