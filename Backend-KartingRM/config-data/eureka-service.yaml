@@ -3,8 +3,14 @@ server:
 eureka:
   instance:
     hostname: eureka-service  # Coincide con el nombre del servicio en docker-compose.yml
+    prefer-ip-address: false
   client:
-    fetch-registry: false
     register-with-eureka: false
-    service-url: 
-      default-zone: http://${eureka.instance.hostname}:${server.port}/eureka/
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+    healthcheck:
+      enabled: true
+  server:
+    wait-time-in-ms-when-sync-empty: 0
+    enable-self-preservation: false
