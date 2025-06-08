@@ -5,8 +5,9 @@ spring:
     config:
       server:
         git:
-          default-label: main
           uri: https://github.com/IsaacEspinoza91/Tingeso-Entrega-2
+          clone-on-start: true
+          default-label: main
           search-paths: config-data
   application:
     name: config-service
