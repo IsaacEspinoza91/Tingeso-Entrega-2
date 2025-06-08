@@ -19,13 +19,14 @@ spring:
           enabled: true
           lower-case-service-id: true
       globalcors:
-        cors-configurations:
+        corsConfigurations:
           '[/**]':
-            allowedOrigins: 
-              - "http://localhost"
-              - "http://localhost:80"
-              - "http://frontend" # Para acceso desde el contenedor
-            allowedMethods: "*"
+            allowedOrigins: "http://localhost"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
             allowedHeaders: "*"
             allowCredentials: true
             maxAge: 3600

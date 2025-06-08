@@ -11,15 +11,4 @@ const httpClient = axios.create({
 });
 
 
-// Interceptor para manejar errores globalmente
-httpClient.interceptors.response.use(
-  response => response,
-  error => {
-    if (error.response && error.response.status === 403) {
-      console.error("Acceso prohibido - Verifique CORS");
-    }
-    return Promise.reject(error);
-  }
-);
-
 export default httpClient;
