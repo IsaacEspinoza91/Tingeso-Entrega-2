@@ -10,8 +10,6 @@ eureka:
 spring:
   application:
     name: eureka-service
-  profiles:
-    active: default
   cloud:
     config:
       enabled: true
