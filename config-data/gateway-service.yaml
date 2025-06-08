@@ -17,12 +17,18 @@ spring:
       discovery:
         locator:
           enabled: true
+          lower-case-service-id: true
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: '*'
+            allowedOrigins: 
+              - "http://localhost"
+              - "http://localhost:80"
+              - "http://frontend" # Para acceso desde el contenedor
             allowedMethods: "*"
             allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 3600
       routes:
         - id: plan-service
           uri: lb://plan-service
