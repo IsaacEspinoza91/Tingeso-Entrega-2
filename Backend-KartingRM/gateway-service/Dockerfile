@@ -1,4 +1,4 @@
 FROM openjdk:11
-ARG JAR_FILE=./target/*.jar
-COPY ${JAR_FILE} gateway-service-1.jar
-ENTRYPOINT ["java","-jar","/gateway-service-1.jar"]
+ARG JAR_FILE=./target/gateway-service-1.jar
+COPY ${JAR_FILE} gateway-service.jar
+ENTRYPOINT ["java","-jar","/gateway-service.jar"]
