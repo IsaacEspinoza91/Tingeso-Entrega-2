@@ -1,1 +1,182 @@
+version: '3.8'
+
+services:
+
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  config-service:
+    image: isaaccumbia/config-service:latest
+    ports:
+      - "8081:8081"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - mysql
+
+  eureka-service:
+    image: isaaccumbia/eureka-service:latest
+    ports:
+      - "8761:8761"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      config-service:
+        condition: service_healthy
+
+  gateway-service:
+    image: isaaccumbia/gateway-service:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - EUREKA_CLIENT_INITIAL_INSTANCE_INFO_REPLICATION_DELAY_SECONDS=10
+      - EUREKA_CLIENT_REGISTRY_FETCH_INTERVAL_SECONDS=5
+      - EUREKA_CLIENT_INSTANCE_RECONNECT_INTERVAL_SECONDS=5
+    depends_on:
+      eureka-service:
+        condition: service_healthy
+
+  cliente-desc-frecu-service:
+    image: isaaccumbia/cliente-desc-frecu-service:latest
+    environment:
+      - DB_USERNAME=root
+      - DB_PASSWORD=1234
+      - EUREKA_CLIENT_INITIAL_INSTANCE_INFO_REPLICATION_DELAY_SECONDS=10
+      - EUREKA_CLIENT_REGISTRY_FETCH_INTERVAL_SECONDS=5
+      - EUREKA_CLIENT_INSTANCE_RECONNECT_INTERVAL_SECONDS=5
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+
+  descuento-grupo-service:
+    image: isaaccumbia/descuento-grupo-service:latest
+    environment:
+      - DB_USERNAME=root
+      - DB_PASSWORD=1234
+      - EUREKA_CLIENT_INITIAL_INSTANCE_INFO_REPLICATION_DELAY_SECONDS=10
+      - EUREKA_CLIENT_REGISTRY_FETCH_INTERVAL_SECONDS=5
+      - EUREKA_CLIENT_INSTANCE_RECONNECT_INTERVAL_SECONDS=5
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+
+  dias-especiales-service:
+    image: isaaccumbia/dias-especiales-service:latest
+    environment:
+      - DB_USERNAME=root
+      - DB_PASSWORD=1234
+      - EUREKA_CLIENT_INITIAL_INSTANCE_INFO_REPLICATION_DELAY_SECONDS=10
+      - EUREKA_CLIENT_REGISTRY_FETCH_INTERVAL_SECONDS=5
+      - EUREKA_CLIENT_INSTANCE_RECONNECT_INTERVAL_SECONDS=5
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+
+  plan-service:
+    image: isaaccumbia/plan-service:latest
+    environment:
+      - DB_USERNAME=root
+      - DB_PASSWORD=1234
+      - EUREKA_CLIENT_INITIAL_INSTANCE_INFO_REPLICATION_DELAY_SECONDS=10
+      - EUREKA_CLIENT_REGISTRY_FETCH_INTERVAL_SECONDS=5
+      - EUREKA_CLIENT_INSTANCE_RECONNECT_INTERVAL_SECONDS=5
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+
+  rack-semanal-service:
+    image: isaaccumbia/rack-semanal-service:latest
+    environment:
+      - DB_USERNAME=root
+      - DB_PASSWORD=1234
+      - EUREKA_CLIENT_INITIAL_INSTANCE_INFO_REPLICATION_DELAY_SECONDS=10
+      - EUREKA_CLIENT_REGISTRY_FETCH_INTERVAL_SECONDS=5
+      - EUREKA_CLIENT_INSTANCE_RECONNECT_INTERVAL_SECONDS=5
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+
+  reportes-service:
+    image: isaaccumbia/reportes-service:latest
+    environment:
+      - DB_USERNAME=root
+      - DB_PASSWORD=1234
+      - EUREKA_CLIENT_INITIAL_INSTANCE_INFO_REPLICATION_DELAY_SECONDS=10
+      - EUREKA_CLIENT_REGISTRY_FETCH_INTERVAL_SECONDS=5
+      - EUREKA_CLIENT_INSTANCE_RECONNECT_INTERVAL_SECONDS=5
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+
+  reservas-comprobantes-service:
+    image: isaaccumbia/reservas-comprobantes-service:latest
+    environment:
+      - DB_USERNAME=root
+      - DB_PASSWORD=1234
+      - EMAIL_NAME=  el correo
+      - PASSWORD_NAME=   clave
+      - EUREKA_CLIENT_INITIAL_INSTANCE_INFO_REPLICATION_DELAY_SECONDS=10
+      - EUREKA_CLIENT_REGISTRY_FETCH_INTERVAL_SECONDS=5
+      - EUREKA_CLIENT_INSTANCE_RECONNECT_INTERVAL_SECONDS=5
+    depends_on:
+      config-service:
+        condition: service_healthy
+      eureka-service:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    image: isaaccumbia/frontend-karting2:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - gateway-service
+
+volumes:
+  mysql_data:
+
 
