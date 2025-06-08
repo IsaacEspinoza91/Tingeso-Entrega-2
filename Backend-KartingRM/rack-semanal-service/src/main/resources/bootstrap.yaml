@@ -4,11 +4,4 @@ spring:
   cloud:
     config:
       enabled: true
-      uri: http://localhost:8081
-  datasource:
-    url: jdbc:mysql://localhost:3306/rack-semanal-db
-    username: root
-    password: 1234
-  jpa:
-    hibernate:
-      ddl-auto: update
+      uri: http://config-service:8081
