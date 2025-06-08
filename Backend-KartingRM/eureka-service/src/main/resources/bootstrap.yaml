@@ -1,6 +1,19 @@
+server:
+  port: 8761
+
+eureka:
+  instance:
+    hostname: eureka-server-service
+    prefer-ip-address: false
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+    service-url:
+      default-zone: http://eureka-server-service:8761/eureka/
+
 spring:
   application:
-    name: eureka-service
+    name: eureka-server-service
   profiles:
     active: default
   cloud:
