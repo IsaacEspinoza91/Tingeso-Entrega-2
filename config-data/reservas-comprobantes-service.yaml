@@ -10,7 +10,7 @@ eureka:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 spring:
   datasource:
-    url: jdbc:mysql://mysql:3306/reserva_db
+    url: jdbc:mysql://reservas-comprobantes-db:3306/reserva_db
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
   jpa:
