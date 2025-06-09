@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reservas-comprobantes-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reservas-comprobantes-service
+  template:
+    metadata:
+      labels:
+        app: reservas-comprobantes-service
+    spec:
+      containers:
+        - name: reservas-comprobantes-service
+          image: isaaccumbia/reservas-comprobantes-service:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: reservas-comprobantes-service-secret
+                  key: db-username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: reservas-comprobantes-service-secret
+                  key: db-password
+            - name: EMAIL-NAME
+              valueFrom:
+                secretKeyRef:
+                  name: reservas-comprobantes-service-secret
+                  key: email-name
+            - name: PASSWORD-NAME
+              valueFrom:
+                secretKeyRef:
+                  name: reservas-comprobantes-service-secret
+                  key: password-name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: reservas-comprobantes-service
+spec:
+  selector:
+    app: reservas-comprobantes-service
+  ports:
+    - port: 8080
+      targetPort: 8080

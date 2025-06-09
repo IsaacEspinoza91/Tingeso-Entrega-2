@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plan-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plan-service
+  template:
+    metadata:
+      labels:
+        app: plan-service
+    spec:
+      containers:
+        - name: plan-service
+          image: isaaccumbia/plan-service:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: plan-service-secret
+                  key: db-username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: plan-service-secret
+                  key: db-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plan-service
+spec:
+  selector:
+    app: plan-service
+  ports:
+    - port: 8080
+      targetPort: 8080

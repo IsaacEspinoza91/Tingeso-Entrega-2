@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rack-semanal-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rack-semanal-db
+  template:
+    metadata:
+      labels:
+        app: rack-semanal-db
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rack-semanal-service-secret
+                  key: db-password
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: rack-semanal-service-config
+                  key: MYSQL_DATABASE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rack-semanal-db
+spec:
+  selector:
+    app: rack-semanal-db
+  ports:
+    - port: 3306
+      targetPort: 3306

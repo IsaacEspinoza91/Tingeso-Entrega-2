@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dias-especiales-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dias-especiales-db
+  template:
+    metadata:
+      labels:
+        app: dias-especiales-db
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dias-especiales-service-secret
+                  key: db-password
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: dias-especiales-service-config
+                  key: MYSQL_DATABASE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dias-especiales-db
+spec:
+  selector:
+    app: dias-especiales-db
+  ports:
+    - port: 3306
+      targetPort: 3306

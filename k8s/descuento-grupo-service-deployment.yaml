@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: descuento-grupo-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: descuento-grupo-service
+  template:
+    metadata:
+      labels:
+        app: descuento-grupo-service
+    spec:
+      containers:
+        - name: descuento-grupo-service
+          image: isaaccumbia/descuento-grupo-service:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: descuento-grupo-service-secret
+                  key: db-username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: descuento-grupo-service-secret
+                  key: db-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: descuento-grupo-service
+spec:
+  selector:
+    app: descuento-grupo-service
+  ports:
+    - port: 8080
+      targetPort: 8080

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cliente-desc-frecu-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cliente-desc-frecu-service
+  template:
+    metadata:
+      labels:
+        app: cliente-desc-frecu-service
+    spec:
+      containers:
+        - name: cliente-desc-frecu-service
+          image: isaaccumbia/cliente-desc-frecu-service:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: cliente-desc-frecu-service-secret
+                  key: db-username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cliente-desc-frecu-service-secret
+                  key: db-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cliente-desc-frecu-service
+spec:
+  selector:
+    app: cliente-desc-frecu-service
+  ports:
+    - port: 8080
+      targetPort: 8080

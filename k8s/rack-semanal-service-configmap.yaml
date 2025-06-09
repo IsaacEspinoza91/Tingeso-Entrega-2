@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rack-semanal-service-config
+data:
+  MYSQL_DATABASE: rack_semanal_db

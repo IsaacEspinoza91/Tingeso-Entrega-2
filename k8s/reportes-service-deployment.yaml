@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reportes-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reportes-service
+  template:
+    metadata:
+      labels:
+        app: reportes-service
+    spec:
+      containers:
+        - name: reportes-service
+          image: isaaccumbia/reportes-service:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: reportes-service-secret
+                  key: db-username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: reportes-service-secret
+                  key: db-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: reportes-service
+spec:
+  selector:
+    app: reportes-service
+  ports:
+    - port: 8080
+      targetPort: 8080

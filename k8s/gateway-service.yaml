@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-service
+  template:
+    metadata:
+      labels:
+        app: gateway-service
+    spec:
+      containers:
+        - name: gateway-service
+          image: isaaccumbia/gateway-service:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: EUREKA_CLIENT_INITIAL_INSTANCE_INFO_REPLICATION_DELAY_SECONDS
+              value: "10"
+            - name: EUREKA_CLIENT_REGISTRY_FETCH_INTERVAL_SECONDS
+              value: "5"
+            - name: EUREKA_CLIENT_INSTANCE_RECONNECT_INTERVAL_SECONDS
+              value: "5"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-service
+spec:
+  type: NodePort
+  selector:
+    app: gateway-service
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30080

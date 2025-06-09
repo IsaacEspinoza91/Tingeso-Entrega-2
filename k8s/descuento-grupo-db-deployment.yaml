@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: descuento-grupo-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: descuento-grupo-db
+  template:
+    metadata:
+      labels:
+        app: descuento-grupo-db
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: descuento-grupo-service-secret
+                  key: db-password
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: descuento-grupo-service-config
+                  key: MYSQL_DATABASE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: descuento-grupo-db
+spec:
+  selector:
+    app: descuento-grupo-db
+  ports:
+    - port: 3306
+      targetPort: 3306

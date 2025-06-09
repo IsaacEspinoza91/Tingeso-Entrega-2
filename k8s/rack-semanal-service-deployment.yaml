@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rack-semanal-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rack-semanal-service
+  template:
+    metadata:
+      labels:
+        app: rack-semanal-service
+    spec:
+      containers:
+        - name: rack-semanal-service
+          image: isaaccumbia/rack-semanal-service:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rack-semanal-service-secret
+                  key: db-username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rack-semanal-service-secret
+                  key: db-password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rack-semanal-service
+spec:
+  selector:
+    app: rack-semanal-service
+  ports:
+    - port: 8080
+      targetPort: 8080
