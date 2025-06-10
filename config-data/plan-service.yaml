@@ -22,7 +22,3 @@ spring:
   cloud:
     discovery:
       enabled: true
-    config:
-      uri: http://config-service:8081  # o la URL real del config-service
-  config:
-    import: optional:configserver:http://config-service:8081
