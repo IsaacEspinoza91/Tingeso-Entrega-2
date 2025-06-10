@@ -13,7 +13,9 @@ public class CorsConfig {
     public CorsWebFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost");
+        //config.addAllowedOrigin("http://localhost");
+        //config.addAllowedOrigin("http://127.0.0.1:"); // puerto en kubernetes
+        config.addAllowedOriginPattern("*"); //  todos los orígenes
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
 
