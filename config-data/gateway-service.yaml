@@ -12,6 +12,8 @@ eureka:
 
 
 spring:
+  application:
+    name: gateway-service
   cloud:
     gateway:
       discovery:
@@ -32,7 +34,7 @@ spring:
             maxAge: 3600
       routes:
         - id: plan-service
-          uri: lb://plan-service
+          uri: lb://PLAN-SERVICE
           predicates:
             - Path=/api/plan/**
         
