@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plan-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plan-service
+  template:
+    metadata:
+      labels:
+        app: plan-service
+    spec:
+      containers:
+        - name: plan-service
+          image: isaaccumbia/plan-service:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: plan-service-secret
+                  key: db-username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: plan-service-secret
+                  key: db-password
+            - name: EUREKA_CLIENT_INITIAL_INSTANCE_INFO_REPLICATION_DELAY_SECONDS
+              value: "10"
+            - name: EUREKA_CLIENT_REGISTRY_FETCH_INTERVAL_SECONDS
+              value: "5"
+            - name: EUREKA_CLIENT_INSTANCE_RECONNECT_INTERVAL_SECONDS
+              value: "5"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plan-service
+spec:
+  selector:
+    app: plan-service
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
