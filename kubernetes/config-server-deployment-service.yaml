@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: config-server
-          image: isaaccumbia/config-service
+          image: isaaccumbia/config-service:latest
           ports:
             - containerPort: 8888
 ---

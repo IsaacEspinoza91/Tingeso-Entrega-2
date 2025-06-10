@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plan-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plan-db
+  template:
+    metadata:
+      labels:
+        app: plan-db
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: plan-service-secret
+                  key: db-password
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: plan-service-config
+                  key: MYSQL_DATABASE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plan-db
+spec:
+  selector:
+    app: plan-db
+  ports:
+    - port: 3306
+      targetPort: 3306

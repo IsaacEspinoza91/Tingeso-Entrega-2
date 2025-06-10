@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: plan-service
-          image: isaaccumbia/plan-service
+          image: isaaccumbia/plan-service:latest
           ports:
             - containerPort: 8090
           env:

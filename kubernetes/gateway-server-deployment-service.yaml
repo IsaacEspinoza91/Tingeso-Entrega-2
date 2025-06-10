@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: gateway-server
-          image: isaaccumbia/gateway-service
+          image: isaaccumbia/gateway-service:latest
           ports:
             - containerPort: 8080
 ---

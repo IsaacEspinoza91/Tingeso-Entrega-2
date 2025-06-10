@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: eureka-server
-          image: isaaccumbia/eureka-service
+          image: isaaccumbia/eureka-service:latest
           ports:
             - containerPort: 8761
 ---
